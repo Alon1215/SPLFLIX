@@ -26,6 +26,9 @@ class LengthRecommenderUser : public User {
 public:
     LengthRecommenderUser(const std::string& name);
     virtual Watchable* getRecommendation(Session& s);
+    LengthRecommenderUser (const LengthRecommenderUser other);
+
+
 private:
 };
 

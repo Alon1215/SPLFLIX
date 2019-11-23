@@ -21,13 +21,9 @@ protected:
 	void complete();
 	void error(const std::string& errorMsg);
 	std::string getErrorMsg() const;
-	void setstatus(ActionStatus stat);
-	ActionStatus getstatus();
-
 private:
 	std::string errorMsg;
 	ActionStatus status;
-
 };
 
 class CreateUser  : public BaseAction {
