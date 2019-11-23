@@ -86,7 +86,7 @@ Session& Session::operator=(const Session &other) { //copy assingment operator
 }
 
 
-User& Session::get_User()   {
+User& Session::get_Active_User()   {
     return *activeUser ;
 }
 const std::vector<Watchable *> Session::get_content() const {
@@ -125,6 +125,12 @@ bool Session::isInMap(std::string _name) {
         return true;
     } else return false;
 }
+void Session::set_Active_user(User* user_Ptr) {
+    //recieves ptr to user and replace the ptr "active user"
+    activeUser = user_Ptr;
+    //check if function is legal
+}
+int Session::getIdToWatch() {return idToWatch}
 
 
 

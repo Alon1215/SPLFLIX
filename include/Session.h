@@ -14,7 +14,7 @@ public:
     Session(const std::string &configFilePath);
     ~Session();
     void start();
-    User& get_User();
+    User& get_Active_User();
     const std::vector<Watchable *> get_content() const;
     Session(const Session &other);
     Session& operator=(const Session& other);
@@ -25,6 +25,9 @@ public:
     bool isInMap(std::string);
     std::string getPrefAlgo();
     std::string getUserName();
+    std::string getNameOfClone();
+    int getIdToWatch();
+    void set_Active_user(User*); //check about classification
 
 
 
@@ -37,6 +40,8 @@ private:
     void copy(const Session &other);
     std::string prefAlgo;
     std::string userName;
+    std::string nameOfClone; //missing function()
+    int idToWatch;
 
 };
 #endif

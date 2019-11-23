@@ -29,6 +29,13 @@ std::string BaseAction::getErrorMsg() const {
 ActionStatus BaseAction::getStatus() const {
     return status;
 }
+std::string BaseAction::sub_ToString(const std::string & action_Name) const {
+    std::string ret = action_Name + " ";
+    if(getStatus()==ERROR){
+        ret = ret + "ERROR: " + getErrorMsg();
+    } else ret = ret + "COMPLETE";
+    return ret;
+}
 
 
 void CreateUser::act(Session &sess) {
@@ -51,19 +58,75 @@ void CreateUser::act(Session &sess) {
 
     }
 }
-std::string CreateUser::toString() const {
-    std::string ret = "CreateUser " + getStatus();
-    if(getStatus()==ERROR){
-        ret = ret + ": " + getErrorMsg();
-    }
-    return ret;
-}
+
 void ChangeActiveUser::act(Session &sess) {
     if (!sess.isInMap(sess.getUserName())){
-        error("User is nont exist");
-    } else
-    User* newActiveUser =
+        error("User is not exist");
+    } else {
+        sess.set_Active_user(sess.getMap()[sess.getUserName()]);
+        //check line while deBugging
+    }
 }
+void DeleteUser::act(Session &sess) {
+    //delete the user, then remove from userMap:
+    std::string _user=sess.getUserName();
+    if(!sess.isInMap(_user)){
+        error("user is not exist");
+    } else{
+        delete sess.getMap().at(_user);
+        sess.getMap().erase(_user);
+    }
+}
+void DuplicateUser::act(Session &sess) {
+    if (!sess.isInMap(sess.getUserName())){
+        error("User is not exist");
+    }else if(sess.isInMap(sess.getNameOfClone())){
+        error("name is already taken");
+    }else {
+        // EMPTY ACTION -complete!
+    }
+}
+void PrintContentList::act(Session &sess) {
+    int i = 1;
+    for (Watchable* x :sess.get_content()) {
+            std::cout << i +". " + x.toString()<<endl;
+            i++;
+    }
+}
+void PrintWatchHistory::act(Session &sess) {
+    int i = 1;
+    for (Watchable* x :sess.get_Active_User().get_history()) {
+        std::cout << i + ". " + x.toString()<<endl;
+        i++;
+    }
+}
+void Watch::act(Session &sess) {
+    int id = sess.getIdToWatch();
+    if (id<1 || id >= sess.get_content().size()){
+        error("index is not valid");
+    } else{
+        // to complete
+    }
+}
+
+
+
+
+
+
+
+
+
+
+// toString() functions:
+std::string ChangeActiveUser::toString() const { return sub_ToString("ChangeActiveUser"); }
+std::string DuplicateUser::toString() const {return sub_ToString("DuplicateUser");}
+std::string CreateUser::toString() const { return sub_ToString("CreatUser");}
+std::string DeleteUser::toString() const {return sub_ToString("DeleteUser");}
+std::string PrintActionsLog::toString() const {return sub_ToString("PrintActionsLog");}
+std::string PrintContentList::toString() const {return sub_ToString("PrintContentList");}
+std::string PrintWatchHistory::toString() const {return sub_ToString("PrintWatchHistory");}
+std::string Watch::toString() const {return sub_ToString("Watch");}
 
 
 

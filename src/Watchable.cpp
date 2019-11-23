@@ -39,7 +39,7 @@ string Movie::toString() const {
     return st;
 }
 Watchable* Movie::getNextWatchable(Session & s) const {
-return s.get_User().getRecommendation(s);
+return s.get_Active_User().getRecommendation(s);
 
 }
 
@@ -79,7 +79,7 @@ Watchable* Episode::getNextWatchable(Session &s) const {
             return p;
         }
     }
-    return s.get_User().getRecommendation(s); // else return algo' recommendtaion
+    return s.get_Active_User().getRecommendation(s); // else return algo' recommendtaion
 }
 
 
