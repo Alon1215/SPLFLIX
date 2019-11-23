@@ -14,18 +14,7 @@ std::string User::getName() const {
     return name;
 }
 
-//LengthRecommenderUser
 
-LengthRecommenderUser::LengthRecommenderUser(const std::string &name): User(name) {
-}
-LengthRecommenderUser:: LengthRecommenderUser(const LengthRecommenderUser other) User(other.getName()) {
-}
-LengthRecommenderUser::
-
-//RerunRecommenderUser:
-
-
-//GenreRecommenderUser:
 
 
 

@@ -106,6 +106,25 @@ Session::~Session() {
     for(auto z:userMap)
         delete z.second;
 }
+std::string Session::getPrefAlgo() {
+    return prefAlgo;
+}
+std::string Session::getUserName() {
+    return userName;
+}
+std:: unordered_map<std::string,User*> Session::getMap() {
+    return userMap;
+}
+void Session::insertMap(std::string _name,User * _User) {
+    userMap[_name]= _User;
+
+}
+bool Session::isInMap(std::string _name) {
+    std::unordered_map<std::string,User*>:: const_iterator got = userMap.find(_name);
+    if (got != userMap.end()){
+        return true;
+    } else return false;
+}
 
 
 
