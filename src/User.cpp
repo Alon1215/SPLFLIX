@@ -5,11 +5,12 @@
 #include "../include/Watchable.h"
 #include "../include/Session.h"
 #include <utility>
+#include <vector>
 
 #include <stdlib.h>
 class Watchable;
 
-User::User(const std::string &name): name(name),history( std::vector<Watchable*> ()),avg(0) {
+User::User(const std::string &name): name(name),history( std::vector<Watchable*> ()) {
     //check HISTORY
 }
 
@@ -22,7 +23,7 @@ std::string User::getName() const {
 
 //LengthRecommenderUser
 
-LengthRecommenderUser::LengthRecommenderUser(const std::string &name): User(name) {
+LengthRecommenderUser::LengthRecommenderUser(const std::string &name): User(name),avg(0) {
 
 }
 
@@ -129,9 +130,17 @@ Watchable* GenreRecommenderUser::getRecommendation(Session &s) {
         }
         return out;
 }
-void User::fix_avg(int length) {
+void LengthRecommenderUser::fix_avg(int length) {
     avg= (avg*(get_history().size()-1) +length)/get_history().size();
 }
+
+void LengthRecommenderUser::watch_handle_algo( Watchable &watched) {
+    addToHistory(watched);
+}
+void User::addToHistory(Watchable *toAdd) {
+    history.push_back(toAdd);
+}
+
 
 
 

@@ -105,13 +105,20 @@ void PrintActionsLog::act(Session &sess) {
 
 void Watch::act(Session &sess) {
     int id = sess.getIdToWatch();
-    if (id<1 || id >= sess.get_content().size()){
+    //id already updated to place in content
+    if (id<0 || id >= sess.get_content().size()){
         error("index is not valid");
     } else{
+        Watchable& toWatch = sess.get_content().at(id);
+        printf("Watching %s", toWatch.toString()); //check
+        sess.get_Active_User().get_history().push_back(sess.get_content().at(id)); //check
+        sess.get_Active_User().watch_handle_algo(id);
+
+        printf("We recommend watching %s, continue watching?[y/n]")
         // to complete
 
 
-        sess.get_Active_User().fix_avg(sess.get_content().at(id-1)->get_length()); //
+        //sess.get_Active_User().fix_avg(sess.get_content().at(id-1)->get_length()); //
     }
 }
 

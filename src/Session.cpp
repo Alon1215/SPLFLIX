@@ -139,7 +139,7 @@ void Session::set_Active_user(User* user_Ptr) {
     activeUser = user_Ptr;
     //check if function is legal
 }
-int Session::getIdToWatch() {return stoi(second);}
+int Session::getIdToWatch() {return stoi(second) -1;} //-1 to Match content's index
 
 std::vector<BaseAction*>& Session::get_ActionsLog() {
 
