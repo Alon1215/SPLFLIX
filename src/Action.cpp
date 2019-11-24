@@ -29,8 +29,8 @@ std::string BaseAction::getErrorMsg() const {
 ActionStatus BaseAction::getStatus() const {
     return status;
 }
-std::string BaseAction::sub_ToString(const std::string & action_Name) const {
-    std::string ret = action_Name + " ";
+std::string BaseAction::sub_ToString() const {
+    std::string ret = this->toString() + " ";
     if(getStatus()==ERROR){
         ret = ret + "ERROR: " + getErrorMsg();
     } else ret = ret + "COMPLETE";
@@ -71,21 +71,13 @@ void DeleteUser::act(Session &sess) {
     //delete the user, then remove from userMap:
     std::string _user=sess.getUserName();
     if(!sess.isInMap(_user)){
-        error("user is not exist");
+        error("User is not exist");
     } else{
         delete sess.getMap().at(_user);
         sess.getMap().erase(_user);
     }
 }
-void DuplicateUser::act(Session &sess) {
-    if (!sess.isInMap(sess.getUserName())){
-        error("User is not exist");
-    }else if(sess.isInMap(sess.getNameOfClone())){
-        error("name is already taken");
-    }else {
-        // EMPTY ACTION -complete!
-    }
-}
+
 void PrintContentList::act(Session &sess) {
     int i = 1;
     for (Watchable* x :sess.get_content()) {
@@ -100,6 +92,16 @@ void PrintWatchHistory::act(Session &sess) {
         i++;
     }
 }
+
+void PrintActionsLog::act(Session &sess) {
+    std::string output;
+    for (int i = sess.get_ActionsLog().size() - 1; i > 0 < ; i = i-1;) {
+        std::cout << sess.get_ActionsLog().at(i).sub_ToString()<<endl; //check
+    }
+}
+
+//empty actions:
+
 void Watch::act(Session &sess) {
     int id = sess.getIdToWatch();
     if (id<1 || id >= sess.get_content().size()){
@@ -109,24 +111,29 @@ void Watch::act(Session &sess) {
     }
 }
 
+void DuplicateUser::act(Session &sess) {
+    if (!sess.isInMap(sess.getUserName())){
+        error("User is not exist");
+    }else if(sess.isInMap(sess.getNameOfClone())){
+        error("Name is already taken");
+    }else {
+        // EMPTY ACTION -complete!
+    }
+}
 
 
 
-
-
-
-
-
+//ActiveLog per user wasn't handled - actions are not added to log
 
 // toString() functions:
-std::string ChangeActiveUser::toString() const { return sub_ToString("ChangeActiveUser"); }
-std::string DuplicateUser::toString() const {return sub_ToString("DuplicateUser");}
-std::string CreateUser::toString() const { return sub_ToString("CreatUser");}
-std::string DeleteUser::toString() const {return sub_ToString("DeleteUser");}
-std::string PrintActionsLog::toString() const {return sub_ToString("PrintActionsLog");}
-std::string PrintContentList::toString() const {return sub_ToString("PrintContentList");}
-std::string PrintWatchHistory::toString() const {return sub_ToString("PrintWatchHistory");}
-std::string Watch::toString() const {return sub_ToString("Watch");}
+std::string ChangeActiveUser::toString() const { return "ChangeActiveUser"; }
+std::string DuplicateUser::toString() const {return "DuplicateUser";}
+std::string CreateUser::toString() const { return "CreatUser";}
+std::string DeleteUser::toString() const {return "DeleteUser";}
+std::string PrintActionsLog::toString() const {return "PrintActionsLog";}
+std::string PrintContentList::toString() const {return "PrintContentList";}
+std::string PrintWatchHistory::toString() const {return "PrintWatchHistory";}
+std::string Watch::toString() const {return "Watch";}
 
 
 

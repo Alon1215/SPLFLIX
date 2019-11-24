@@ -17,11 +17,11 @@ public:
 	ActionStatus getStatus() const;
 	virtual void act(Session& sess)=0;
 	virtual std::string toString() const=0;
+    std::string sub_ToString(const std::string&) const; //can it be protected?
 protected:
 	void complete();
 	void error(const std::string& errorMsg);
 	std::string getErrorMsg() const;
-    std::string sub_ToString(const std::string&) const; //can it be protected?
 private:
 	std::string errorMsg;
 	ActionStatus status;

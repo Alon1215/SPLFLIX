@@ -28,6 +28,7 @@ public:
     std::string getNameOfClone();
     int getIdToWatch();
     void set_Active_user(User*); //check about classification
+    std::vector<BaseAction*>& get_ActionsLog() ; //what value is returned?
 
 
 
