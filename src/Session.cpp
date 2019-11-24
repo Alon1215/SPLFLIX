@@ -3,13 +3,17 @@
 //
 
 #include <fstream>
+#include <cstdio>
 #include "../include/Session.h"
 #include "../include/Watchable.h"
-class Movie;
-class Episode;
+#include "../include/User.h"
 
 
-Session::Session(const std::string &configFilePath) {
+
+
+
+Session::Session(const std::string &configFilePath):command(""),second(""),third("") {
+
 
         std::fstream ifs(configFilePath);
         nlohmann::json j = nlohmann::json::parse(ifs);
@@ -37,8 +41,6 @@ Session::Session(const std::string &configFilePath) {
                 seasonNumber++;
             }
         }
-
-
     }
 Session::Session(const Session &other):activeUser(other.activeUser) { // copy consructor
     copy(other);
@@ -48,7 +50,7 @@ Session::Session(Session &&other):activeUser(other.activeUser) { //move construc
     other.activeUser= nullptr;
     userMap=other.userMap; //use move operator of unordered_map
     copy(other);
-    other.clear();
+    other.activeUser= nullptr;
 }
 Session& Session::operator=(Session &&other) { //move assignment operator
     if(this!=&other){
@@ -58,7 +60,6 @@ Session& Session::operator=(Session &&other) { //move assignment operator
             delete z.second;
         userMap=other.userMap; //move assignment operator
         copy(other);
-        other.clear();
         activeUser=other.activeUser;
         other.activeUser=nullptr;
 
@@ -86,7 +87,7 @@ Session& Session::operator=(const Session &other) { //copy assingment operator
 }
 
 
-User& Session::get_User()   {
+User& Session::get_Active_User()   {
     return *activeUser ;
 }
 const std::vector<Watchable *> Session::get_content() const {
@@ -105,6 +106,22 @@ Session::~Session() {
     clear();
     for(auto z:userMap)
         delete z.second;
+}
+void Session::start() {
+    printf("SPLFLIX is now on!");
+    //std::cout <<"SPLFLIX is now on!" << std::endl;
+    User *def= new LengthRecommenderUser("default");
+    std:: string input="";
+    while(command != "exit"){
+        printf("what would you like to do?");
+        std::cin >> command;
+        if(command=="createuser"){
+
+        }
+
+
+    }
+
 }
 
 

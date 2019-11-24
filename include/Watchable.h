@@ -17,9 +17,11 @@ public:
     int get_length() const;
     const std::vector<std::string>& get_tags() const;
     virtual const std::string get_name() const=0;
+
 private:
     const long id;
     int length;
+
     std::vector<std::string> tags;
 };
 

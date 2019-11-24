@@ -10,7 +10,7 @@ using namespace std;
 class User;
 class Session;
 
-Watchable::Watchable(long id, int length, const vector <string> &tags):id(id),length(length),tags(tags) {}
+Watchable::Watchable(long id, int length, const vector <string> &tags):id(id),length(length),tags(tags),watched(false) {}
 
 Movie::Movie(long id, const std::string &name, int length, const std::vector <string> &tags):name(name),Watchable(id,length,tags) {}
 long Watchable::get_id() const {
@@ -39,7 +39,7 @@ string Movie::toString() const {
     return st;
 }
 Watchable* Movie::getNextWatchable(Session & s) const {
-return s.get_User().getRecommendation(s);
+return s.get_Active_User().getRecommendation(s);
 
 }
 
@@ -71,6 +71,7 @@ const std::string Movie::get_name() const {
     return name;
 }
 
+
 Watchable* Episode::getNextWatchable(Session &s) const {
     Watchable *out=nullptr;
     if(nextEpisodeId<s.get_content().size()){ //check if there is a next episode available, idf so return it
@@ -79,7 +80,7 @@ Watchable* Episode::getNextWatchable(Session &s) const {
             return p;
         }
     }
-    return s.get_User().getRecommendation(s); // else return algo' recommendtaion
+    return s.get_Active_User().getRecommendation(s); // else return algo' recommendtaion
 }
 
 
