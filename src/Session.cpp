@@ -123,6 +123,16 @@ void Session::start() {
     }
 
 }
+void Session::set_Active_user(User* user_Ptr) {
+    //recieves ptr to user and replace the ptr "active user"
+    activeUser = user_Ptr;
+    //check if function is legal
+}
+int Session::getIdToWatch() {return idToWatch;}
+
+std::vector<BaseAction*>& Session::get_ActionsLog() {
+    std::vector<BaseAction*>& output = actionsLog;
+    return  output;} //syntax is not valid
 
 
 

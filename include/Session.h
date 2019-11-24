@@ -25,6 +25,10 @@ public:
     bool isInMap(std::string);
     std::string getPrefAlgo();
     std::string getUserName();
+    std::string getNameOfClone();
+    int getIdToWatch();
+    void set_Active_user(User*); //check about classification
+    std::vector<BaseAction*>& get_ActionsLog() ; //what value is returned?
 
 
 
@@ -41,6 +45,8 @@ private:
     std::string command;
     std::string second;
     std::string third;
+    std::string nameOfClone; //missing function()
+    int idToWatch;
 
 };
 #endif
