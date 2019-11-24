@@ -20,6 +20,13 @@ public:
     Session& operator=(const Session& other);
     Session(Session &&other);
     Session& operator=(Session &&other);
+    std:: unordered_map<std::string,User*> getMap();
+    void insertMap(std::string,User*);
+    bool isInMap(std::string);
+    std::string getPrefAlgo();
+    std::string getUserName();
+
+
 
 private:
     std::vector<Watchable*> unwatched; //vector containing unwatched content only
@@ -29,6 +36,8 @@ private:
     User* activeUser;
     void clear();
     void copy(const Session &other);
+    std::string prefAlgo;
+    std::string userName;
     std::string command;
     std::string second;
     std::string third;
