@@ -75,14 +75,14 @@ void DeleteUser::act(Session &sess) {
     } else{
         delete sess.getMap().at(_user);
         sess.getMap().erase(_user);
+
     }
 }
-
 void PrintContentList::act(Session &sess) {
     int i = 1;
     for (Watchable* x :sess.get_content()) {
-            std::cout << i +". " + x.toString()<<endl;
-            i++;
+        std::cout << i +". " + x.toString()<<endl;
+        i++;
     }
 }
 void PrintWatchHistory::act(Session &sess) {
@@ -95,8 +95,8 @@ void PrintWatchHistory::act(Session &sess) {
 
 void PrintActionsLog::act(Session &sess) {
     std::string output;
-    for (int i = sess.get_ActionsLog().size() - 1; i > 0 < ; i = i-1;) {
-        std::cout << sess.get_ActionsLog().at(i).sub_ToString()<<endl; //check
+    for (int i = sess.get_ActionsLog().size() - 1; i > 0 < ; i = i-1) {
+        std::cout << sess.get_ActionsLog().at(i).sub_ToString()<<endl; //;;check
     }
 }
 
@@ -140,5 +140,5 @@ std::string Watch::toString() const {return "Watch";}
 
 
 
-
+git -c credential.helper= -c core.quotepath=false -c log.showSignature=false rm --ignore-errors -A -- src/Action.cpp
 
