@@ -25,10 +25,10 @@ public:
     bool isInMap(std::string);
     std::string getPrefAlgo();
     std::string getUserName();
-    std::string getNameOfClone();
     int getIdToWatch();
     void set_Active_user(User*); //check about classification
     std::vector<BaseAction*>& get_ActionsLog() ; //what value is returned?
+    void copy(const Session &other);
 
 
 
@@ -39,14 +39,11 @@ private:
     std::unordered_map<std::string,User*> userMap;
     User* activeUser;
     void clear();
-    void copy(const Session &other);
-    std::string prefAlgo;
-    std::string userName;
-    std::string command;
-    std::string second;
-    std::string third;
-    std::string nameOfClone; //missing function()
-    int idToWatch;
+    std::string command; //first input word
+    std::string second; //second input word
+    std::string third; // third '' "    "
+
+
 
 };
 #endif

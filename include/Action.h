@@ -17,7 +17,7 @@ public:
 	ActionStatus getStatus() const;
 	virtual void act(Session& sess)=0;
 	virtual std::string toString() const=0;
-    std::string sub_ToString(const std::string&) const; //can it be protected?
+    std::string sub_ToString() const; //can it be protected?
 protected:
 	void complete();
 	void error(const std::string& errorMsg);

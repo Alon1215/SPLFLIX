@@ -10,7 +10,7 @@ using namespace std;
 class User;
 class Session;
 
-Watchable::Watchable(long id, int length, const vector <string> &tags):id(id),length(length),tags(tags),watched(false) {}
+Watchable::Watchable(long id, int length, const vector <string> &tags):id(id),length(length),tags(tags) {}
 
 Movie::Movie(long id, const std::string &name, int length, const std::vector <string> &tags):name(name),Watchable(id,length,tags) {}
 long Watchable::get_id() const {
@@ -44,9 +44,7 @@ return s.get_Active_User().getRecommendation(s);
 }
 
 Episode::Episode(long id, const std::string &seriesName, int length, int season, int episode,
-        const std::vector<std::string> &tags):seriesName(seriesName),season(season),episode(episode),Watchable(id,length,tags){
-    nextEpisodeId=id+1;
-}
+        const std::vector<std::string> &tags):seriesName(seriesName),season(season),episode(episode),nextEpisodeId(id+1),Watchable(id,length,tags){}
 
 string Episode::toString() const {
     string st=seriesName+" S"+to_string(season)+"E"+to_string(episode)+" "+to_string(get_length())+" minutes [";
@@ -78,6 +76,7 @@ Watchable* Episode::getNextWatchable(Session &s) const {
         Watchable *p=s.get_content().at(nextEpisodeId);
         if(seriesName == p->get_name()){
             return p;
+
         }
     }
     return s.get_Active_User().getRecommendation(s); // else return algo' recommendtaion

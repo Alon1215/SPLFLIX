@@ -9,9 +9,10 @@
 #include <stdlib.h>
 class Watchable;
 
-User::User(const std::string &name): name(name),history( std::vector<Watchable*> ()) {
+User::User(const std::string &name): name(name),history( std::vector<Watchable*> ()),avg(0) {
     //check HISTORY
 }
+
 std::vector<Watchable*> User::get_history() const {
     return history;
 }
@@ -24,6 +25,7 @@ std::string User::getName() const {
 LengthRecommenderUser::LengthRecommenderUser(const std::string &name): User(name) {
 
 }
+
 std::vector<Watchable*> User::get_unwatched(Session& s) {
     std::vector<Watchable*> output;
     for(int i=0;i<s.get_content().size();i++){ //iterate through all content
@@ -126,8 +128,10 @@ Watchable* GenreRecommenderUser::getRecommendation(Session &s) {
             }
         }
         return out;
-        }
-
+}
+void User::fix_avg(int length) {
+    avg= (avg*(get_history().size()-1) +length)/get_history().size();
+}
 
 
 

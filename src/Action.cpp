@@ -76,6 +76,7 @@ void DeleteUser::act(Session &sess) {
         delete sess.getMap().at(_user);
         sess.getMap().erase(_user);
 
+
     }
 }
 void PrintContentList::act(Session &sess) {
@@ -95,8 +96,8 @@ void PrintWatchHistory::act(Session &sess) {
 
 void PrintActionsLog::act(Session &sess) {
     std::string output;
-    for (int i = sess.get_ActionsLog().size() - 1; i > 0 < ; i = i-1) {
-        std::cout << sess.get_ActionsLog().at(i).sub_ToString()<<endl; //;;check
+    for (int i = sess.get_ActionsLog().size() - 1; i >= 0  ; i = i-1) {
+        std::cout << sess.get_ActionsLog().at(i).sub_ToString()<<endl; //;;check why doesn't work
     }
 }
 
@@ -108,17 +109,21 @@ void Watch::act(Session &sess) {
         error("index is not valid");
     } else{
         // to complete
+
+
+        sess.get_Active_User().fix_avg(sess.get_content().at(id-1)->get_length()); //
     }
 }
 
 void DuplicateUser::act(Session &sess) {
     if (!sess.isInMap(sess.getUserName())){
-        error("User is not exist");
+        error("User does not exist");
     }else if(sess.isInMap(sess.getNameOfClone())){
         error("Name is already taken");
     }else {
         // EMPTY ACTION -complete!
     }
+
 }
 
 
@@ -140,5 +145,4 @@ std::string Watch::toString() const {return "Watch";}
 
 
 
-git -c credential.helper= -c core.quotepath=false -c log.showSignature=false rm --ignore-errors -A -- src/Action.cpp
 

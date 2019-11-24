@@ -7,12 +7,13 @@
 #include "../include/Session.h"
 #include "../include/Watchable.h"
 #include "../include/User.h"
+#include <vector>
+#include <string>
 
 
 
 
-
-Session::Session(const std::string &configFilePath):command(""),second(""),third("") {
+Session::Session(const std::string &configFilePath): command(""), second(""), third("") {
 
 
         std::fstream ifs(configFilePath);
@@ -24,6 +25,7 @@ Session::Session(const std::string &configFilePath):command(""),second(""),third
             Movie *newMovie = new Movie(id, movie["name"], movie["length"], movie["tags"]);
             content.push_back(newMovie);
             id++;
+
         }
 
         nlohmann::json tv_series = j["tv_series"];
@@ -42,6 +44,9 @@ Session::Session(const std::string &configFilePath):command(""),second(""),third
             }
         }
     }
+    std::string Session::getUserName() {return second;}
+    std::string Session::getPrefAlgo() {return third;}
+
 Session::Session(const Session &other):activeUser(other.activeUser) { // copy consructor
     copy(other);
     userMap=other.userMap; //use copy assignment operator of unordered_map
@@ -90,7 +95,7 @@ Session& Session::operator=(const Session &other) { //copy assingment operator
 User& Session::get_Active_User()   {
     return *activeUser ;
 }
-const std::vector<Watchable *> Session::get_content() const {
+const std::vector<Watchable*> Session::get_content() const {
     return content;
 }
 void Session::clear() {
@@ -115,7 +120,13 @@ void Session::start() {
     while(command != "exit"){
         printf("what would you like to do?");
         std::cin >> command;
+        std::cin >> second;
         if(command=="createuser"){
+            std::cin >> third;
+            CreateUser *p=new CreateUser() ;
+            p->act(*this);
+            actionsLog.push_back(p);
+
 
         }
 
@@ -128,14 +139,9 @@ void Session::set_Active_user(User* user_Ptr) {
     activeUser = user_Ptr;
     //check if function is legal
 }
-int Session::getIdToWatch() {return idToWatch;}
+int Session::getIdToWatch() {return stoi(second);}
 
 std::vector<BaseAction*>& Session::get_ActionsLog() {
-    std::vector<BaseAction*>& output = actionsLog;
-    return  output;} //syntax is not valid
 
-
-
-
-
-;
+    return  actionsLog; //syntax is not valid
+}
