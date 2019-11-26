@@ -141,32 +141,28 @@ void Watch::act(Session &sess) {
         error("invalid input");
     }
     else {
-    int id = sess.getIdToWatch();
-    //id already updated to place in content
-    if (id<0 || id >= sess.get_content().size()){
-        error("index is not valid");
-    } else {
-
-        complete();
-        Watchable *toWatch = sess.get_content().at(id);
-        printf("Watching %s\n", toWatch->toString().c_str()); //check
-        sess.get_Active_User().watch_handle_algo(toWatch);
-        Watchable *next = toWatch->getNextWatchable(sess);
-        printf("We recommend watching %s, continue watching?[y/n]\n", next->toString().c_str());
-        std::string input;
-        std::cin >> input;
-        if (input=="y") {
-            sess.set_next_id(next->get_id());
-            Watch *c1 = new Watch();
-            c1->act(sess);
-            sess.get_ActionsLog().push_back(c1);
-        } else if (input != "n") {
-            printf("wrong input, should be y/n\n");
+        int id = sess.getIdToWatch();
+        //id already updated to place in content
+        if (id < 0 || id >= sess.get_content().size()) {
+            error("index is not valid");
+        } else {
+            complete();
+            Watchable *toWatch = sess.get_content().at(id);
+            printf("Watching %s\n", toWatch->toString().c_str()); //check
+            sess.get_Active_User().watch_handle_algo(toWatch);
+            Watchable *next = toWatch->getNextWatchable(sess);
+            printf("We recommend watching %s, continue watching?[y/n]\n", next->toString().c_str());
+            std::string input;
+            std::cin >> input;
+            if (input == "y") {
+                sess.set_next_id(next->get_id());
+                Watch *c1 = new Watch();
+                sess.get_ActionsLog().push_back(c1);
+                c1->act(sess);
+            } else if (input != "n") {
+                printf("wrong input, should be y/n\n");
+            }
         }
-        // to complete
-    }
-
-
     }
 }
 

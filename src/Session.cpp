@@ -112,23 +112,15 @@ Session::~Session() {
 }
 void Session::start() {
     printf("SPLFLIX is now on!\n");
-    //std::cout <<"SPLFLIX is now on!" << std::endl;
     activeUser= new LengthRecommenderUser("default");
     while(true){
-        printf("what would you like to do?\n");
-        //std::cin >> command;
-        //std::cin >> second;
-
-        //ALON: new input action:
         std::string input_string;
+        printf("what would you like to do?\n");
         getline(std::cin,input_string);
-        //std::vector<std::string> input_vector = input_to_vector(input_string);
         vector_for_actions = input_to_vector(input_string);
-        //vector is now the words of the input line separated
 
         if (((int)vector_for_actions.size())==0 || ((int)vector_for_actions.size()) >3 ){
-            std::cout << "in"
-                         "put is not valid" << std::endl;
+            std::cout << "input put is not valid"<< std::endl;
 
         }else if(vector_for_actions.at(0)=="createuser"){
             //std::cin >> third;
@@ -172,7 +164,6 @@ void Session::start() {
             actionsLog.push_back(p);
         }else if(vector_for_actions.at(0)=="watch"){
             Watch *p=new Watch();
-            bool isWatchNext = true;
             actionsLog.push_back(p);
             p->act(*this);
         }else if(vector_for_actions.at(0)=="exit") {
@@ -180,7 +171,7 @@ void Session::start() {
             p->act(*this);
             actionsLog.push_back(p);
             break;
-        }else {(printf("invalid input\n"));}
+        } else {printf("invalid input\n");}
     }
 
 }

@@ -49,7 +49,7 @@ std::string Watchable::content_string() {
         else{
             st += *tag+"]";
         }
-        ++i;
+        i++;
     }
     st=" "+st;
     st =toString().c_str() + st;
@@ -68,14 +68,13 @@ const std::string Movie::get_name() const {
 
 Watchable* Episode::getNextWatchable(Session &s) const {
     Watchable *out = nullptr;
-    if (nextEpisodeId < s.get_content().size()) { //check if there is a next episode available, idf so return it
-        if (nextEpisodeId < s.get_content().size()) { //check if there is a next episode available, idf so return it
-            Watchable *p = s.get_content().at(nextEpisodeId);
-            if (seriesName == p->get_name()) {
-                return p;
-            }
+    if (nextEpisodeId < s.get_content().size()) {
+        Watchable *p = s.get_content().at(nextEpisodeId-1);
+        if (seriesName == p->get_name()) { //check if there is a next episode available, if so return it
+            return p;
         }
-        return s.get_Active_User().getRecommendation(s); // else return algo' recommendtaion
     }
+    return s.get_Active_User().getRecommendation(s);
+    // else return algo' recommendtaion
 }
 Watchable::~Watchable() {}
