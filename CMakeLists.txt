@@ -3,4 +3,4 @@ project(SPLFLIX)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_executable(SPLFLIX main.cpp src/Session.cpp src/Action.cpp src/Watchable.cpp src/User.cpp)
+add_executable(SPLFLIX main.cpp src/Session.cpp src/Action.cpp src/Watchable.cpp src/User.cpp src/Action.cpp)
