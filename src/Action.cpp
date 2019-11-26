@@ -49,13 +49,13 @@ void CreateUser::act(Session &sess) {
         error("The user name is already taken");
     } else{
         complete(); //unless algo is invalid. if so - corrects in last case
-        if(prefAlgo.compare("len") == 0){
+        if(prefAlgo =="len"){
             LengthRecommenderUser *p=new LengthRecommenderUser(userName);
             sess.insertMap(userName,p);
-        } else if (prefAlgo.compare("rer") == 0) {
+        } else if (prefAlgo=="rer") {
             RerunRecommenderUser *p=new RerunRecommenderUser(userName);
             sess.insertMap(userName,p);
-        } else if (prefAlgo.compare("gen") == 0) {
+        } else if (prefAlgo=="gen") {
             GenreRecommenderUser *p=new GenreRecommenderUser(userName);
             sess.insertMap(userName, p);
         }else {error("Algorithm is not valid");}
@@ -65,17 +65,17 @@ void CreateUser::act(Session &sess) {
 }
 
 void ChangeActiveUser::act(Session &sess) {
-    if (!sess.isInMap(sess.getUserName())){
+    if (!sess.isInMap(sess.get_vector_for_actions()->at(1))){
         error("User is not exist");
     } else {
-        sess.set_Active_user(sess.getMap()[sess.getUserName()]);
+        sess.set_Active_user(sess.getMap()[sess.get_vector_for_actions()->at(1)]);
         //check line while deBugging
         complete();
     }
 }
 void DeleteUser::act(Session &sess) {
     //delete the user, then remove from userMap:
-    std::string _user=sess.getUserName();
+    std::string _user=sess.get_vector_for_actions()->at(1);
     if(!sess.isInMap(_user)){
         error("User is not exist");
     } else{
