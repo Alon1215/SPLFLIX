@@ -115,15 +115,26 @@ Session::~Session() {
         delete z.second;
 }
 void Session::start() {
-    printf("SPLFLIX is now on!");
+    printf("SPLFLIX is now on!\n");
     //std::cout <<"SPLFLIX is now on!" << std::endl;
     activeUser= new LengthRecommenderUser("default");
-    while(command != "exit"){
-        printf("what would you like to do?");
-        std::cin >> command;
-        std::cin >> second;
-        if(command=="createuser"){
-            std::cin >> third;
+    while(true){
+        printf("what would you like to do?\n");
+        //std::cin >> command;
+        //std::cin >> second;
+
+        //ALON: new input action:
+        std::string input_string;
+        getline(std::cin,input_string);
+        std::vector<std::string> input_vector = input_to_vector(input_string);
+        vector_for_actions = &input_vector;
+        //vector is now the words of the input line separated
+
+        if (((int)input_vector.size())==0 || ((int)input_vector.size()) >3 ){
+            std::cout << "input is not valid" << std::endl;
+
+        }else if(command=="createuser"){
+            //std::cin >> third;
             CreateUser *p=new CreateUser() ;
             p->act(*this);
             actionsLog.push_back(p);
@@ -192,6 +203,8 @@ void Session::start() {
             break;
         }
 
+        //prepare for next input:
+        input_vector.clear();
     }
 
 }
@@ -224,3 +237,26 @@ void Session::insertMap(std::string s, User * u) {
     std::pair<std::string,User*> toinsert (s,u);
     userMap.insert(toinsert);
 }
+
+
+//new way to receive input
+std::vector<std::string> Session::input_to_vector(std::string str) {
+    std::string word = "";
+    std::vector<std::string> output;
+    for (auto x : str)
+    {
+        if (x == ' ')
+        {
+            std::string newWord = word;
+            output.push_back(word);
+            word = "";
+        }
+        else
+        {
+            word = word + x;
+        }
+    }
+    output.push_back(word);
+    return output;
+}
+std::vector<std::string>* Session::get_vector_for_actions() { return vector_for_actions;}

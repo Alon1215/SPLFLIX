@@ -42,8 +42,8 @@ std::string BaseAction::sub_ToString() const {
 
 void CreateUser::act(Session &sess) {
     std::unordered_map<std::string,User*> map = sess.getMap();
-    std::string prefAlgo = sess.getPrefAlgo();
-    std::string userName = sess.getUserName();
+    std::string prefAlgo = sess.get_vector_for_actions()->at(2);
+    std::string userName = sess.get_vector_for_actions()->at(1);
 
     if (sess.isInMap(userName)){
         error("The user name is already taken");
@@ -88,7 +88,7 @@ void DeleteUser::act(Session &sess) {
 void PrintContentList::act(Session &sess) {
     int i = 1;
     for (Watchable* x :sess.get_content()) {
-        printf("%d. %s",i,x->content_string().c_str()); //fix
+        printf("%d. %s\n",i,x->content_string().c_str()); //fix
         i++;
     }
     complete();
@@ -96,7 +96,7 @@ void PrintContentList::act(Session &sess) {
 void PrintWatchHistory::act(Session &sess) {
     int i = 1;
     for (Watchable* x :sess.get_Active_User().get_history()) {
-        printf("%d. %s",i,x->toString().c_str());
+        printf("%d. %s\n",i,x->toString().c_str());
         i++;
     }
     complete();
@@ -120,10 +120,10 @@ void Watch::act(Session &sess) {
     } else{
         complete();
         Watchable *toWatch = sess.get_content().at(id);
-        printf("Watching %s", toWatch->toString().c_str()); //check
+        printf("Watching %s\n", toWatch->toString().c_str()); //check
         sess.get_Active_User().watch_handle_algo(toWatch);
         Watchable *next = toWatch->getNextWatchable(sess);
-        printf("We recommend watching %s, continue watching?[y/n]",next->toString().c_str());
+        printf("We recommend watching %s, continue watching?[y/n]\n",next->toString().c_str());
         std::string input;
         std::cin >> input;
         if (input.compare("y")==0){
@@ -133,7 +133,7 @@ void Watch::act(Session &sess) {
             sess.get_ActionsLog().push_back(c1);
         }
         else if(input!= "n"){
-            printf("wrong input, should be y or n");
+            printf("wrong input, should be y or n\n");
         }
         // to complete
 
@@ -153,7 +153,7 @@ void DuplicateUser::act(Session &sess) {
     }
 }
 void Exit::act(Session &sess) {
-    printf("you chose to exit, goodbye!");
+    printf("you chose to exit, goodbye!\n");
 }
 
 

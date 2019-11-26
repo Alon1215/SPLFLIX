@@ -30,6 +30,9 @@ public:
     std::vector<BaseAction*>& get_ActionsLog() ; //what value is returned?
     void copy(const Session &other);
     void set_next_id(int id);
+    std::vector<std::string>  input_to_vector(std::string);
+    std::vector<std::string>* get_vector_for_actions();
+
 
 
 
@@ -43,6 +46,8 @@ private:
     std::string command; //first input word
     std::string second; //second input word
     std::string third; // third '' "    "
+    //new field:
+    std::vector<std::string>* vector_for_actions;
 
 
 
