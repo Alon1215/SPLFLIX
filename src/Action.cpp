@@ -75,29 +75,28 @@ void DeleteUser::act(Session &sess) {
     } else{
         delete sess.getMap().at(_user);
         sess.getMap().erase(_user);
-
-
     }
 }
+
 void PrintContentList::act(Session &sess) {
     int i = 1;
     for (Watchable* x :sess.get_content()) {
-        std::cout << i +". " + x.toString()<<endl;
+        printf("%d. %s",i,x->toString()); //check if prints legal line
         i++;
     }
 }
 void PrintWatchHistory::act(Session &sess) {
     int i = 1;
     for (Watchable* x :sess.get_Active_User().get_history()) {
-        std::cout << i + ". " + x.toString()<<endl;
+        std::cout << i + ". " + x->toString()<<endl;
         i++;
     }
 }
 
 void PrintActionsLog::act(Session &sess) {
     std::string output;
-    for (int i = sess.get_ActionsLog().size() - 1; i >= 0  ; i = i-1) {
-        std::cout << sess.get_ActionsLog().at(i).sub_ToString()<<endl; //;;check why doesn't work
+    for (int i = sess.get_ActionsLog().size() - 1; i >= 0; i = i-1) {
+        std::cout << sess.get_ActionsLog().at(i)->sub_ToString()<<std::endl; //check
     }
 }
 
