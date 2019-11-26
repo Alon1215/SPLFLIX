@@ -110,10 +110,9 @@ void Watch::act(Session &sess) {
     } else{
         Watchable *toWatch = sess.get_content().at(id);
         printf("Watching %s", toWatch.toString()); //check
-        sess.get_Active_User().get_history().push_back(sess.get_content().at(id)); //check
-        sess.get_Active_User().watch_handle_algo(id);
+        sess.get_Active_User().watch_handle_algo(toWatch);
 
-        printf("We recommend watching %s, continue watching?[y/n]");
+        printf("We recommend watching %s, continue watching?[y/n]",);
         // to complete
 
 

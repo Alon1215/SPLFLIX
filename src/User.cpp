@@ -134,9 +134,12 @@ void LengthRecommenderUser::fix_avg(int length) {
     avg= (avg*(get_history().size()-1) +length)/get_history().size();
 }
 
-void LengthRecommenderUser::watch_handle_algo( Watchable &watched) {
+void LengthRecommenderUser::watch_handle_algo( Watchable *watched) {
     addToHistory(watched);
+    fix_avg(watched->get_length());
 }
+void GenreRecommenderUser::watch_handle_algo(Watchable *watched) {addToHistory(watched);}
+void RerunRecommenderUser::watch_handle_algo(Watchable *watched) {addToHistory(watched);}
 void User::addToHistory(Watchable *toAdd) {
     history.push_back(toAdd);
 }
