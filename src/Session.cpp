@@ -16,10 +16,11 @@
 Session::Session(const std::string &configFilePath): command(""), second(""), third("") {
 
 
-        std::fstream ifs(configFilePath);
-        nlohmann::json j = nlohmann::json::parse(ifs);
-        nlohmann::json movies = j["movies"];
-        int id = 1;
+    std::fstream ifs(configFilePath);
+    nlohmann::json j = nlohmann::json::parse(ifs);
+    nlohmann::json movies = j["movies"];
+    int id = 1;
+    for (auto &x : movies.items()) {
         for (auto &x : movies.items()) {
             nlohmann::json movie = x.value();
             Movie *newMovie = new Movie(id, movie["name"], movie["length"], movie["tags"]);
@@ -44,8 +45,9 @@ Session::Session(const std::string &configFilePath): command(""), second(""), th
             }
         }
     }
-    std::string Session::getUserName() {return second;}
-    std::string Session::getPrefAlgo() {return third;}
+}
+    std::string Session::getUserName() { return second; }
+    std::string Session::getPrefAlgo() { return third; }
 
 Session::Session(const Session &other):activeUser(other.activeUser) { // copy consructor
     copy(other);
@@ -115,8 +117,7 @@ Session::~Session() {
 void Session::start() {
     printf("SPLFLIX is now on!");
     //std::cout <<"SPLFLIX is now on!" << std::endl;
-    User *def= new LengthRecommenderUser("default");
-    std:: string input="";
+    activeUser= new LengthRecommenderUser("default");
     while(command != "exit"){
         printf("what would you like to do?");
         std::cin >> command;
@@ -126,10 +127,70 @@ void Session::start() {
             CreateUser *p=new CreateUser() ;
             p->act(*this);
             actionsLog.push_back(p);
+        }
+        else if(command=="changeuser"){
+            if(activeUser->getName()=="default"){
+                delete activeUser;
+                activeUser=nullptr;
+            }
 
+            ChangeActiveUser *p=new ChangeActiveUser();
+            p->act(*this);
+            actionsLog.push_back(p);
 
         }
+        else if(command=="deleteuser"){
+            DeleteUser *p=new DeleteUser();
+            p->act(*this);
+            actionsLog.push_back(p);
+        }
+        else if(command=="dupuser"){
+            DuplicateUser *p=new DuplicateUser();
+            p->act(*this);
+            actionsLog.push_back(p);
+        }
+        else if(command=="content"){
+            PrintContentList *p=new PrintContentList();
+            p->act(*this);
+            actionsLog.push_back(p);
+        }
+        else if(command=="watchhist"){
+            PrintWatchHistory *p=new PrintWatchHistory();
+            p->act(*this);
+            actionsLog.push_back(p);
+        }
+        else if(command=="log"){
+            PrintActionsLog *p=new PrintActionsLog();
+            p->act(*this);
+            actionsLog.push_back(p);
+        }
+        else if(command=="Watch"){
+            Watch *p=new Watch();
+            bool isWatchNext = true;
+            while (isWatchNext){
+                p->act(*this);
+                actionsLog.push_back(p);
+                //get next.....
+                std:: string x;
+                std::cin >>  x;
+                if (x == "y"){
+                    Watch *tmp = new Watch();
+                    tmp->act(*this);
+                    actionsLog.push_back(tmp);
+                }
+                else if(x=="n")
+                    isWatchNext=false;
 
+            }
+            p->act(*this);
+            actionsLog.push_back(p);
+        }
+        else if(command=="exit"){
+            Exit *p=new Exit();
+            p->act(*this);
+            actionsLog.push_back(p);
+            break;
+        }
 
     }
 
@@ -140,8 +201,26 @@ void Session::set_Active_user(User* user_Ptr) {
     //check if function is legal
 }
 int Session::getIdToWatch() {return stoi(second) -1;} //-1 to Match content's index
+void Session::set_next_id(int id) {
+    second=id;
+}
 
 std::vector<BaseAction*>& Session::get_ActionsLog() {
 
     return  actionsLog; //syntax is not valid
+}
+std:: unordered_map<std::string,User*> Session::getMap() {
+    return userMap;
+}
+bool Session::isInMap(std::string s) {
+    std::unordered_map<std::string,User*>::const_iterator got = userMap.find(s);
+
+    if ( got == userMap.end() )
+        return false;
+    else
+        return true;
+}
+void Session::insertMap(std::string s, User * u) {
+    std::pair<std::string,User*> toinsert (s,u);
+    userMap.insert(toinsert);
 }

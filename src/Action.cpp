@@ -17,10 +17,11 @@ void BaseAction:: complete() {
     status = COMPLETED;
 
 }
+
 void BaseAction::error(const std::string &errorMsg) {
     status = ERROR;
     this->errorMsg = errorMsg;
-    std:: cout<<"Error -" + errorMsg ;
+    std:: cout<<"Error -" + errorMsg << std::endl;
 }
 
 std::string BaseAction::getErrorMsg() const {
@@ -49,11 +50,14 @@ void CreateUser::act(Session &sess) {
     } else{
         complete(); //unless algo is invalid. if so - corrects in last case
         if(prefAlgo.compare("len") == 0){
-            sess.insertMap(userName,new LengthRecommenderUser(userName));
+            LengthRecommenderUser *p=new LengthRecommenderUser(userName);
+            sess.insertMap(userName,p);
         } else if (prefAlgo.compare("rer") == 0) {
-            sess.insertMap(userName,new RerunRecommenderUser(userName));
+            RerunRecommenderUser *p=new RerunRecommenderUser(userName);
+            sess.insertMap(userName,p);
         } else if (prefAlgo.compare("gen") == 0) {
-            sess.insertMap(userName, new GenreRecommenderUser(userName));
+            GenreRecommenderUser *p=new GenreRecommenderUser(userName);
+            sess.insertMap(userName, p);
         }else {error("Algorithm is not valid");}
 
 
@@ -84,7 +88,7 @@ void DeleteUser::act(Session &sess) {
 void PrintContentList::act(Session &sess) {
     int i = 1;
     for (Watchable* x :sess.get_content()) {
-        printf("%d. %s",i,x->stringContect.c_str()); //fix
+        printf("%d. %s",i,x->content_string().c_str()); //fix
         i++;
     }
     complete();
@@ -118,12 +122,18 @@ void Watch::act(Session &sess) {
         Watchable *toWatch = sess.get_content().at(id);
         printf("Watching %s", toWatch->toString().c_str()); //check
         sess.get_Active_User().watch_handle_algo(toWatch);
-        std::string next = toWatch->getNextWatchable(sess)->toString();
-        printf("We recommend watching %s, continue watching?[y/n]",next.c_str());
+        Watchable *next = toWatch->getNextWatchable(sess);
+        printf("We recommend watching %s, continue watching?[y/n]",next->toString().c_str());
         std::string input;
         std::cin >> input;
         if (input.compare("y")==0){
-            Watch c1(sess);
+            sess.set_next_id(next->get_id());
+            Watch *c1=new Watch();
+            c1->act(sess);
+            sess.get_ActionsLog().push_back(c1);
+        }
+        else if(input!= "n"){
+            printf("wrong input, should be y or n");
         }
         // to complete
 
@@ -138,9 +148,12 @@ void DuplicateUser::act(Session &sess) {
         error("Name is already taken");
     }else {
         complete();
-        // EMPTY ACTION -complete!
+        User *newuser = sess.get_Active_User().duplicate(sess.getUserName());
+        sess.insertMap(sess.getUserName(),newuser);
     }
-
+}
+void Exit::act(Session &sess) {
+    printf("you chose to exit, goodbye!");
 }
 
 
@@ -156,7 +169,7 @@ std::string PrintActionsLog::toString() const {return "PrintActionsLog";}
 std::string PrintContentList::toString() const {return "PrintContentList";}
 std::string PrintWatchHistory::toString() const {return "PrintWatchHistory";}
 std::string Watch::toString() const {return "Watch";}
-
+std::string Exit::toString() const {return "Exit";}
 
 
 

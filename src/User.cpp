@@ -26,6 +26,11 @@ std::string User::getName() const {
 LengthRecommenderUser::LengthRecommenderUser(const std::string &name): User(name),avg(0) {
 
 }
+RerunRecommenderUser::RerunRecommenderUser(const std::string &name):User(name),lastrec(-1) {
+
+}
+GenreRecommenderUser::GenreRecommenderUser(const std::string &name):User(name) {}
+
 
 std::vector<Watchable*> User::get_unwatched(Session& s) {
     std::vector<Watchable*> output;
@@ -143,6 +148,28 @@ void RerunRecommenderUser::watch_handle_algo(Watchable *watched) {addToHistory(w
 void User::addToHistory(Watchable *toAdd) {
     history.push_back(toAdd);
 }
+User* LengthRecommenderUser::duplicate( std::string name) {
+    LengthRecommenderUser* newuser= new LengthRecommenderUser(name);
+    newuser->history= this->history;
+    newuser->avg=this->avg;
+    return newuser;
+}
+User* RerunRecommenderUser::duplicate( std::string name) {
+    RerunRecommenderUser* newuser= new RerunRecommenderUser(name);
+    newuser->history= this->history;
+    newuser->lastrec=this->lastrec;
+    return newuser;
+}
+User* GenreRecommenderUser::duplicate( std::string name) {
+    GenreRecommenderUser* newuser= new GenreRecommenderUser(name);
+    newuser->history= this->history;
+    return newuser;
+}
+User::~User() {}
+LengthRecommenderUser::~LengthRecommenderUser(){}
+RerunRecommenderUser::~RerunRecommenderUser() {}
+GenreRecommenderUser::~GenreRecommenderUser() {}
+
 
 
 

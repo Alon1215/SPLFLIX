@@ -17,6 +17,7 @@ public:
     int get_length() const;
     const std::vector<std::string>& get_tags() const;
     virtual const std::string get_name() const=0;
+    std::string content_string ();
 
 private:
     const long id;

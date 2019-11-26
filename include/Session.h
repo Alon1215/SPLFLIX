@@ -22,13 +22,14 @@ public:
     Session& operator=(Session &&other);
     std:: unordered_map<std::string,User*> getMap();
     void insertMap(std::string,User*);
-    bool isInMap(std::string);
+    bool isInMap(std::string s);
     std::string getPrefAlgo();
     std::string getUserName();
     int getIdToWatch();
     void set_Active_user(User*); //check about classification
     std::vector<BaseAction*>& get_ActionsLog() ; //what value is returned?
     void copy(const Session &other);
+    void set_next_id(int id);
 
 
 
