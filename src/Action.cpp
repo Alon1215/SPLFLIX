@@ -108,12 +108,12 @@ void Watch::act(Session &sess) {
     if (id<0 || id >= sess.get_content().size()){
         error("index is not valid");
     } else{
-        Watchable& toWatch = sess.get_content().at(id);
+        Watchable *toWatch = sess.get_content().at(id);
         printf("Watching %s", toWatch.toString()); //check
         sess.get_Active_User().get_history().push_back(sess.get_content().at(id)); //check
         sess.get_Active_User().watch_handle_algo(id);
 
-        printf("We recommend watching %s, continue watching?[y/n]")
+        printf("We recommend watching %s, continue watching?[y/n]");
         // to complete
 
 
