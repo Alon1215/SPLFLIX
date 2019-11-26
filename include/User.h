@@ -17,11 +17,12 @@ public:
     virtual void watch_handle_algo( Watchable *watched) = 0;
     virtual User* duplicate( std::string name)=0;
     virtual ~User();
+    void addToHistory(Watchable* toAdd);
+
 
 protected:
     std::vector<Watchable*> history;
     std::vector<Watchable*>get_unwatched(Session& s);
-    void addToHistory(Watchable* toAdd);
 
 private:
      std::string name;

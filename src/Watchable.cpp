@@ -24,19 +24,18 @@ const std::vector<std::string>& Watchable::get_tags() const {
     return tags ;
 }
 std::string Movie::toString() const {
-    std::string st=name+" ";
+    return name;
 
 }
 Watchable* Movie::getNextWatchable(Session & s) const {
-return s.get_Active_User().getRecommendation(s);
-
+    return s.get_Active_User().getRecommendation(s);
 }
 
 Episode::Episode(long id, const std::string &seriesName, int length, int season, int episode,
         const std::vector<std::string> &tags):Watchable(id,length,tags),seriesName(seriesName),season(season),episode(episode),nextEpisodeId(id+1){}
 
 std::string Episode::toString() const {
-    std::string st=seriesName+" S0"+std::to_string(season)+"E0"+std::to_string(episode)+" ";
+    std::string st=seriesName+" S0"+std::to_string(season)+"E0"+std::to_string(episode);
     return st;
 }
 std::string Watchable::content_string() {
@@ -52,6 +51,8 @@ std::string Watchable::content_string() {
         }
         ++i;
     }
+    st=" "+st;
+    st =toString().c_str() + st;
     return st;
 }
 
@@ -72,11 +73,9 @@ Watchable* Episode::getNextWatchable(Session &s) const {
             Watchable *p = s.get_content().at(nextEpisodeId);
             if (seriesName == p->get_name()) {
                 return p;
-
             }
         }
         return s.get_Active_User().getRecommendation(s); // else return algo' recommendtaion
     }
-
 }
 Watchable::~Watchable() {}

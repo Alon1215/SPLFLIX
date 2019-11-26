@@ -41,119 +41,153 @@ std::string BaseAction::sub_ToString() const {
 
 
 void CreateUser::act(Session &sess) {
-    std::unordered_map<std::string,User*> map = sess.getMap();
-    std::string prefAlgo = sess.get_vector_for_actions()->at(2);
-    std::string userName = sess.get_vector_for_actions()->at(1);
+    if ((int )sess.get_vector_for_actions().size() != 3) {
+        error("invalid input");
+    }else {
+        std::unordered_map<std::string, User *> map = sess.getMap();
+        std::string prefAlgo = sess.get_vector_for_actions().at(2);
+        std::string userName = sess.get_vector_for_actions().at(1);
 
-    if (sess.isInMap(userName)){
-        error("The user name is already taken");
-    } else{
-        complete(); //unless algo is invalid. if so - corrects in last case
-        if(prefAlgo =="len"){
-            LengthRecommenderUser *p=new LengthRecommenderUser(userName);
-            sess.insertMap(userName,p);
-        } else if (prefAlgo=="rer") {
-            RerunRecommenderUser *p=new RerunRecommenderUser(userName);
-            sess.insertMap(userName,p);
-        } else if (prefAlgo=="gen") {
-            GenreRecommenderUser *p=new GenreRecommenderUser(userName);
-            sess.insertMap(userName, p);
-        }else {error("Algorithm is not valid");}
+        if (sess.isInMap(userName)) {
+            error("The user name is already taken");
+        } else {
+            complete(); //unless algo is invalid. if so - corrects in last case
+            if (prefAlgo == "len") {
+                LengthRecommenderUser *p = new LengthRecommenderUser(userName);
+                sess.insertMap(userName, p);
+            } else if (prefAlgo == "rer") {
+                RerunRecommenderUser *p = new RerunRecommenderUser(userName);
+                sess.insertMap(userName, p);
+            } else if (prefAlgo == "gen") {
+                GenreRecommenderUser *p = new GenreRecommenderUser(userName);
+                sess.insertMap(userName, p);
+            } else { error("Algorithm is not valid"); }
 
 
+        }
     }
 }
 
 void ChangeActiveUser::act(Session &sess) {
-    if (!sess.isInMap(sess.get_vector_for_actions()->at(1))){
-        error("User is not exist");
-    } else {
-        sess.set_Active_user(sess.getMap()[sess.get_vector_for_actions()->at(1)]);
-        //check line while deBugging
-        complete();
+    if ((int )sess.get_vector_for_actions().size() != 2) {
+        error("invalid input");
+    }else {
+        if (!sess.isInMap(sess.get_vector_for_actions().at(1))) {
+            error("User is not exist");
+        } else {
+            sess.set_Active_user(sess.getMap()[sess.get_vector_for_actions().at(1)]);
+            //check line while deBugging
+            complete();
+        }
     }
 }
 void DeleteUser::act(Session &sess) {
     //delete the user, then remove from userMap:
-    std::string _user=sess.get_vector_for_actions()->at(1);
-    if(!sess.isInMap(_user)){
-        error("User is not exist");
-    } else{
-        delete sess.getMap().at(_user);
-        sess.getMap().erase(_user);
-        complete();
+    if ((int )sess.get_vector_for_actions().size() != 2) {
+        error("invalid input");
+    }else {
+        std::string _user = sess.get_vector_for_actions().at(1);
+        if (!sess.isInMap(_user)) {
+            error("User is not exist");
+        } else {
+            delete sess.getMap().at(_user);
+            sess.getMap().erase(_user);
+            complete();
+        }
     }
 }
 
 void PrintContentList::act(Session &sess) {
-    int i = 1;
-    for (Watchable* x :sess.get_content()) {
-        printf("%d. %s\n",i,x->content_string().c_str()); //fix
-        i++;
+    if ((int )sess.get_vector_for_actions().size() != 1) {
+        error("invalid input");
+    }else {
+        int i = 1;
+        for (Watchable *x :sess.get_content()) {
+            printf("%d. %s\n", i, x->content_string().c_str()); //fix
+            i++;
+        }
+        complete();
     }
-    complete();
 }
 void PrintWatchHistory::act(Session &sess) {
-    int i = 1;
-    for (Watchable* x :sess.get_Active_User().get_history()) {
-        printf("%d. %s\n",i,x->toString().c_str());
-        i++;
+    if ((int )sess.get_vector_for_actions().size() != 1) {
+        error("invalid input");
+    }else {
+        int i = 1;
+        for (Watchable *x :sess.get_Active_User().get_history()) {
+            printf("%d. %s\n", i, x->toString().c_str());
+            i++;
+        }
+        complete();
     }
-    complete();
 }
 
 void PrintActionsLog::act(Session &sess) {
-    std::string output;
-    for (int i =(int) sess.get_ActionsLog().size() - 1; i >= 0; i = i-1) {
-        std::cout << sess.get_ActionsLog().at(i)->sub_ToString()<<std::endl; //check
+    if ((int )sess.get_vector_for_actions().size() != 1) {
+        error("invalid input");
+    }else {
+        std::string output;
+        for (int i = (int) sess.get_ActionsLog().size() - 1; i >= 0; i = i - 1) {
+            std::cout << sess.get_ActionsLog().at(i)->sub_ToString() << std::endl; //check
+        }
+        complete();
     }
-    complete();
 }
 
 //empty actions:
 
 void Watch::act(Session &sess) {
+    if ((int)sess.get_vector_for_actions().size() != 2) {
+        error("invalid input");
+    }
+    else {
     int id = sess.getIdToWatch();
     //id already updated to place in content
     if (id<0 || id >= sess.get_content().size()){
         error("index is not valid");
-    } else{
+    } else {
+
         complete();
         Watchable *toWatch = sess.get_content().at(id);
         printf("Watching %s\n", toWatch->toString().c_str()); //check
         sess.get_Active_User().watch_handle_algo(toWatch);
         Watchable *next = toWatch->getNextWatchable(sess);
-        printf("We recommend watching %s, continue watching?[y/n]\n",next->toString().c_str());
+        printf("We recommend watching %s, continue watching?[y/n]\n", next->toString().c_str());
         std::string input;
         std::cin >> input;
-        if (input.compare("y")==0){
+        if (input=="y") {
             sess.set_next_id(next->get_id());
-            Watch *c1=new Watch();
+            Watch *c1 = new Watch();
             c1->act(sess);
             sess.get_ActionsLog().push_back(c1);
-        }
-        else if(input!= "n"){
-            printf("wrong input, should be y or n\n");
+        } else if (input != "n") {
+            printf("wrong input, should be y/n\n");
         }
         // to complete
+    }
 
 
     }
 }
 
 void DuplicateUser::act(Session &sess) {
-    if (!sess.isInMap(sess.getUserName())){
-        error("User does not exist");
-    }else if(sess.isInMap(sess.getPrefAlgo())){
-        error("Name is already taken");
+    if ((int )sess.get_vector_for_actions().size() != 2) {
+        error("invalid input");
     }else {
-        complete();
-        User *newuser = sess.get_Active_User().duplicate(sess.getUserName());
-        sess.insertMap(sess.getUserName(),newuser);
+        if (!sess.isInMap(sess.get_vector_for_actions().at(1))) {
+            error("User does not exist");
+        } else if (sess.isInMap(sess.get_vector_for_actions().at(2))) {
+            error("Name is already taken");
+        } else {
+            complete();
+            User *newuser = sess.get_Active_User().duplicate(sess.get_vector_for_actions().at(2));
+            sess.insertMap(sess.get_vector_for_actions().at(2), newuser); //check if right index in vector
+        }
     }
 }
 void Exit::act(Session &sess) {
     printf("you chose to exit, goodbye!\n");
+    complete();
 }
 
 
@@ -163,7 +197,7 @@ void Exit::act(Session &sess) {
 // toString() functions:
 std::string ChangeActiveUser::toString() const { return "ChangeActiveUser"; }
 std::string DuplicateUser::toString() const {return "DuplicateUser";}
-std::string CreateUser::toString() const { return "CreatUser";}
+std::string CreateUser::toString() const { return "CreateUser";}
 std::string DeleteUser::toString() const {return "DeleteUser";}
 std::string PrintActionsLog::toString() const {return "PrintActionsLog";}
 std::string PrintContentList::toString() const {return "PrintContentList";}

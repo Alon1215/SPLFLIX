@@ -13,7 +13,7 @@
 
 
 
-Session::Session(const std::string &configFilePath): command(""), second(""), third("") {
+Session::Session(const std::string &configFilePath) {
 
 
     std::fstream ifs(configFilePath);
@@ -21,14 +21,11 @@ Session::Session(const std::string &configFilePath): command(""), second(""), th
     nlohmann::json movies = j["movies"];
     int id = 1;
     for (auto &x : movies.items()) {
-        for (auto &x : movies.items()) {
-            nlohmann::json movie = x.value();
-            Movie *newMovie = new Movie(id, movie["name"], movie["length"], movie["tags"]);
-            content.push_back(newMovie);
-            id++;
-
+        nlohmann::json movie = x.value();
+        Movie *newMovie = new Movie(id, movie["name"], movie["length"], movie["tags"]);
+        content.push_back(newMovie);
+        id++;
         }
-
         nlohmann::json tv_series = j["tv_series"];
         for (auto &x : tv_series.items()) {
             nlohmann::json series = x.value();
@@ -44,10 +41,9 @@ Session::Session(const std::string &configFilePath): command(""), second(""), th
                 seasonNumber++;
             }
         }
-    }
 }
-    std::string Session::getUserName() { return second; }
-    std::string Session::getPrefAlgo() { return third; }
+
+
 
 Session::Session(const Session &other):activeUser(other.activeUser) { // copy consructor
     copy(other);
@@ -126,20 +122,21 @@ void Session::start() {
         //ALON: new input action:
         std::string input_string;
         getline(std::cin,input_string);
-        std::vector<std::string> input_vector = input_to_vector(input_string);
-        vector_for_actions = &input_vector;
+        //std::vector<std::string> input_vector = input_to_vector(input_string);
+        vector_for_actions = input_to_vector(input_string);
         //vector is now the words of the input line separated
 
-        if (((int)input_vector.size())==0 || ((int)input_vector.size()) >3 ){
-            std::cout << "input is not valid" << std::endl;
+        if (((int)vector_for_actions.size())==0 || ((int)vector_for_actions.size()) >3 ){
+            std::cout << "in"
+                         "put is not valid" << std::endl;
 
-        }else if(command=="createuser"){
+        }else if(vector_for_actions.at(0)=="createuser"){
             //std::cin >> third;
             CreateUser *p=new CreateUser() ;
             p->act(*this);
             actionsLog.push_back(p);
         }
-        else if(command=="changeuser"){
+        else if(vector_for_actions.at(0)=="changeuser"){
             if(activeUser->getName()=="default"){
                 delete activeUser;
                 activeUser=nullptr;
@@ -150,61 +147,40 @@ void Session::start() {
             actionsLog.push_back(p);
 
         }
-        else if(command=="deleteuser"){
+        else if(vector_for_actions.at(0)=="deleteuser"){
             DeleteUser *p=new DeleteUser();
             p->act(*this);
             actionsLog.push_back(p);
         }
-        else if(command=="dupuser"){
+        else if(vector_for_actions.at(0)=="dupuser"){
             DuplicateUser *p=new DuplicateUser();
             p->act(*this);
             actionsLog.push_back(p);
         }
-        else if(command=="content"){
+        else if(vector_for_actions.at(0)=="content"){
             PrintContentList *p=new PrintContentList();
             p->act(*this);
             actionsLog.push_back(p);
         }
-        else if(command=="watchhist"){
-            PrintWatchHistory *p=new PrintWatchHistory();
+        else if(vector_for_actions.at(0)=="watchhist") {
+            PrintWatchHistory *p = new PrintWatchHistory();
             p->act(*this);
             actionsLog.push_back(p);
-        }
-        else if(command=="log"){
-            PrintActionsLog *p=new PrintActionsLog();
+        }else if(vector_for_actions.at(0)=="log") {
+            PrintActionsLog *p = new PrintActionsLog();
             p->act(*this);
             actionsLog.push_back(p);
-        }
-        else if(command=="Watch"){
+        }else if(vector_for_actions.at(0)=="watch"){
             Watch *p=new Watch();
             bool isWatchNext = true;
-            while (isWatchNext){
-                p->act(*this);
-                actionsLog.push_back(p);
-                //get next.....
-                std:: string x;
-                std::cin >>  x;
-                if (x == "y"){
-                    Watch *tmp = new Watch();
-                    tmp->act(*this);
-                    actionsLog.push_back(tmp);
-                }
-                else if(x=="n")
-                    isWatchNext=false;
-
-            }
-            p->act(*this);
             actionsLog.push_back(p);
-        }
-        else if(command=="exit"){
-            Exit *p=new Exit();
+            p->act(*this);
+        }else if(vector_for_actions.at(0)=="exit") {
+            Exit *p = new Exit();
             p->act(*this);
             actionsLog.push_back(p);
             break;
-        }
-
-        //prepare for next input:
-        input_vector.clear();
+        }else {(printf("invalid input\n"));}
     }
 
 }
@@ -213,9 +189,9 @@ void Session::set_Active_user(User* user_Ptr) {
     activeUser = user_Ptr;
     //check if function is legal
 }
-int Session::getIdToWatch() {return stoi(second) -1;} //-1 to Match content's index
+int Session::getIdToWatch() {return stoi(vector_for_actions.at(1)) -1;} //-1 to Match content's index
 void Session::set_next_id(int id) {
-    second=id;
+    vector_for_actions.at(1)=std::to_string(id);
 }
 
 std::vector<BaseAction*>& Session::get_ActionsLog() {
@@ -259,4 +235,4 @@ std::vector<std::string> Session::input_to_vector(std::string str) {
     output.push_back(word);
     return output;
 }
-std::vector<std::string>* Session::get_vector_for_actions() { return vector_for_actions;}
+std::vector<std::string> Session::get_vector_for_actions() { return vector_for_actions;}

@@ -23,31 +23,25 @@ public:
     std:: unordered_map<std::string,User*> getMap();
     void insertMap(std::string,User*);
     bool isInMap(std::string s);
-    std::string getPrefAlgo();
-    std::string getUserName();
     int getIdToWatch();
     void set_Active_user(User*); //check about classification
     std::vector<BaseAction*>& get_ActionsLog() ; //what value is returned?
     void copy(const Session &other);
     void set_next_id(int id);
     std::vector<std::string>  input_to_vector(std::string);
-    std::vector<std::string>* get_vector_for_actions();
+    std::vector<std::string> get_vector_for_actions();
 
 
 
 
 private:
-    std::vector<Watchable*> unwatched; //vector containing unwatched content only
     std::vector<Watchable*> content;
     std::vector<BaseAction*> actionsLog;
     std::unordered_map<std::string,User*> userMap;
     User* activeUser;
     void clear();
-    std::string command; //first input word
-    std::string second; //second input word
-    std::string third; // third '' "    "
     //new field:
-    std::vector<std::string>* vector_for_actions;
+    std::vector<std::string> vector_for_actions;
 
 
 
