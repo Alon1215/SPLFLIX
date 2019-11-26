@@ -1,11 +1,12 @@
 //
 // Created by alonmichaeli on 22/11/2019.
 //
-
+#include <string>
 #include <cstring>
 #include "../include/Action.h"
 #include "../include/User.h"
 #include "../include/Session.h"
+#include "../include/Watchable.h"
 
 
 BaseAction::BaseAction() {
@@ -46,7 +47,7 @@ void CreateUser::act(Session &sess) {
     if (sess.isInMap(userName)){
         error("The user name is already taken");
     } else{
-
+        complete(); //unless algo is invalid. if so - corrects in last case
         if(prefAlgo.compare("len") == 0){
             sess.insertMap(userName,new LengthRecommenderUser(userName));
         } else if (prefAlgo.compare("rer") == 0) {
@@ -65,6 +66,7 @@ void ChangeActiveUser::act(Session &sess) {
     } else {
         sess.set_Active_user(sess.getMap()[sess.getUserName()]);
         //check line while deBugging
+        complete();
     }
 }
 void DeleteUser::act(Session &sess) {
@@ -75,29 +77,33 @@ void DeleteUser::act(Session &sess) {
     } else{
         delete sess.getMap().at(_user);
         sess.getMap().erase(_user);
+        complete();
     }
 }
 
 void PrintContentList::act(Session &sess) {
     int i = 1;
     for (Watchable* x :sess.get_content()) {
-        printf("%d. %s",i,x->toString()); //check if prints legal line
+        printf("%d. %s",i,x->stringContect.c_str()); //fix
         i++;
     }
+    complete();
 }
 void PrintWatchHistory::act(Session &sess) {
     int i = 1;
     for (Watchable* x :sess.get_Active_User().get_history()) {
-        std::cout << i + ". " + x->toString()<<endl;
+        printf("%d. %s",i,x->toString().c_str());
         i++;
     }
+    complete();
 }
 
 void PrintActionsLog::act(Session &sess) {
     std::string output;
-    for (int i = sess.get_ActionsLog().size() - 1; i >= 0; i = i-1) {
+    for (int i =(int) sess.get_ActionsLog().size() - 1; i >= 0; i = i-1) {
         std::cout << sess.get_ActionsLog().at(i)->sub_ToString()<<std::endl; //check
     }
+    complete();
 }
 
 //empty actions:
@@ -108,24 +114,30 @@ void Watch::act(Session &sess) {
     if (id<0 || id >= sess.get_content().size()){
         error("index is not valid");
     } else{
+        complete();
         Watchable *toWatch = sess.get_content().at(id);
-        printf("Watching %s", toWatch.toString()); //check
+        printf("Watching %s", toWatch->toString().c_str()); //check
         sess.get_Active_User().watch_handle_algo(toWatch);
-
-        printf("We recommend watching %s, continue watching?[y/n]",);
+        std::string next = toWatch->getNextWatchable(sess)->toString();
+        printf("We recommend watching %s, continue watching?[y/n]",next.c_str());
+        std::string input;
+        std::cin >> input;
+        if (input.compare("y")==0){
+            Watch c1(sess);
+        }
         // to complete
 
 
-        //sess.get_Active_User().fix_avg(sess.get_content().at(id-1)->get_length()); //
     }
 }
 
 void DuplicateUser::act(Session &sess) {
     if (!sess.isInMap(sess.getUserName())){
         error("User does not exist");
-    }else if(sess.isInMap(sess.getNameOfClone())){
+    }else if(sess.isInMap(sess.getPrefAlgo())){
         error("Name is already taken");
     }else {
+        complete();
         // EMPTY ACTION -complete!
     }
 
