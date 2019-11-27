@@ -19,7 +19,8 @@ public:
 	virtual std::string toString() const=0;
     std::string sub_ToString() const; //can it be protected?
     void sub_toClone(BaseAction&);
-    virtual BaseAction* clone(BaseAction &other) = 0;
+    virtual BaseAction* clone() = 0;
+    virtual ~BaseAction();
 protected:
 	void complete();
 	void error(const std::string& errorMsg);
@@ -33,21 +34,21 @@ class CreateUser  : public BaseAction {
 public:
 	virtual void act(Session& sess);
 	virtual std::string toString() const;
-    virtual BaseAction* clone(BaseAction &other);
+    virtual BaseAction* clone();
 };
 
 class ChangeActiveUser : public BaseAction {
 public:
 	virtual void act(Session& sess);
 	virtual std::string toString() const;
-    virtual BaseAction* clone(BaseAction &other);
+    virtual BaseAction* clone();
 };
 
 class DeleteUser : public BaseAction {
 public:
 	virtual void act(Session & sess);
 	virtual std::string toString() const;
-    virtual BaseAction* clone(BaseAction &other);
+    virtual BaseAction* clone();
 };
 
 
@@ -55,21 +56,21 @@ class DuplicateUser : public BaseAction {
 public:
 	virtual void act(Session & sess);
 	virtual std::string toString() const;
-    virtual BaseAction* clone(BaseAction &other);
+    virtual BaseAction* clone();
 };
 
 class PrintContentList : public BaseAction {
 public:
 	virtual void act (Session& sess);
 	virtual std::string toString() const;
-    virtual BaseAction* clone(BaseAction &other);
+    virtual BaseAction* clone();
 };
 
 class PrintWatchHistory : public BaseAction {
 public:
 	virtual void act (Session& sess);
 	virtual std::string toString() const;
-    virtual BaseAction* clone(BaseAction &other);
+    virtual BaseAction* clone();
 };
 
 
@@ -77,7 +78,7 @@ class Watch : public BaseAction {
 public:
 	virtual void act(Session& sess);
 	virtual std::string toString() const;
-    virtual BaseAction* clone(BaseAction &other);
+    virtual BaseAction* clone();
 };
 
 
@@ -85,13 +86,13 @@ class PrintActionsLog : public BaseAction {
 public:
 	virtual void act(Session& sess);
 	virtual std::string toString() const;
-    virtual BaseAction* clone(BaseAction &other);
+    virtual BaseAction* clone();
 };
 
 class Exit : public BaseAction {
 public:
 	virtual void act(Session& sess);
 	virtual std::string toString() const;
-    virtual BaseAction* clone(BaseAction &other);
+    virtual BaseAction* clone();
 };
 #endif

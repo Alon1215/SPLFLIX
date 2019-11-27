@@ -15,7 +15,7 @@ public:
     ~Session();
     void start();
      User& get_Active_User() const;
-    const std::vector<Watchable *> get_content() const;
+    std::vector<Watchable *> get_content() const;
     Session(const Session &other);
     Session& operator=(const Session& other);
     Session(Session &&other);
@@ -28,9 +28,9 @@ public:
     std::vector<BaseAction*>& get_ActionsLog() ; //what value is returned?
     void copy(const Session &other);
     void set_next_id(int id);
-    std::vector<std::string>  input_to_vector(std::string);
+    static std::vector<std::string>  input_to_vector(std::string);
     std::vector<std::string> get_vector_for_actions();
-
+    void steal(Session &other);
 
 
 

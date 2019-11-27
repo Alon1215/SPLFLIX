@@ -46,15 +46,15 @@ std::string Episode::toString() const {
         s = s + "0";
     }
     //create st:
-    std::string st=seriesName + s + std::to_string(season) + e + std::to_string(episode);
+    std::string st=seriesName +" "+ s + std::to_string(season) + e + std::to_string(episode);
     return st;
 }
 std::string Watchable::content_string() {
     std::string st=std::to_string(get_length())+" minutes [";
-    std::vector<std::string> tags=get_tags();
+    std::vector<std::string> _tags=get_tags();
     int i=0;
-    for(auto tag = tags.begin();tag!=tags.end();++tag){ //adding the tags to the string
-        if(i < tags.size()-1) { //if this is not the final tag add  a comma
+    for(auto tag = _tags.begin(); tag != _tags.end(); ++tag){ //adding the _tags to the string
+        if(i < _tags.size() - 1) { //if this is not the final tag add  a comma
             st += *tag + ", ";
         }
         else{

@@ -51,7 +51,23 @@ Session::Session(const std::string &configFilePath) {
 Session::Session(const Session &other):activeUser(other.activeUser) { // copy consructor
     copy(other);
 }
-Session::Session(Session &&other):activeUser(other.activeUser) { //move constructor
+
+void Session::copy(const Session &other) { //for copying
+    for (int i=0; i<other.content.size(); i++){
+        content.push_back(other.content.at(i)->clone());
+    }
+    for(int i=0; i<other.actionsLog.size();i++){
+        BaseAction *p1 = other.actionsLog.at(i)->clone();
+        actionsLog.push_back(p1);
+    }
+    for(auto i: other.userMap){
+        User* newClone = i.second->clone();
+        newClone->fix_History(*this);
+        insertMap(i.first,newClone);
+    }
+    activeUser = userMap[other.activeUser->getName()];
+}
+void Session::steal(Session &other) {
     for(Watchable* w : other.get_content()){
         content.push_back(w);
         w=nullptr;
@@ -67,30 +83,20 @@ Session::Session(Session &&other):activeUser(other.activeUser) { //move construc
     other.activeUser= nullptr;
     //other.clear();
 }
+
+Session::Session(Session &&other):activeUser(other.activeUser) { //move constructor
+   steal(other);
+}
 Session& Session::operator=(Session &&other) { //move assignment operator
     if(this!=&other){
         clear();
-        delete activeUser;
-        copy(other);
-        other.activeUser=nullptr;
-
+        //delete activeUser; //check if line needed
+        steal(other);
     }
+    return *this;
 }
 
-void Session::copy(const Session &other) { //for copying
-    for (int i=0; i<other.content.size(); i++){
-       content.push_back(other.content.at(i)->clone());
-    }
-    for(int i=0; i<other.actionsLog.size();i++){
-        BaseAction* p1;
-        p1->clone(*get_ActionsLog().at(i));
-        actionsLog.push_back(p1);
-    }
-    for(auto i: other.userMap){
-        insertMap(i.first,i.second->clone());
-    }
-    activeUser = userMap[other.activeUser->getName()];
-}
+
 
 Session& Session::operator=(const Session &other) { //copy assignment operator
     if(this != &other){
@@ -105,7 +111,7 @@ Session& Session::operator=(const Session &other) { //copy assignment operator
  User& Session::get_Active_User() const   {
     return *activeUser ;
 }
-const std::vector<Watchable*> Session::get_content() const {
+std::vector<Watchable*> Session::get_content() const {
     return content;
 }
 void Session::clear() {
@@ -121,10 +127,10 @@ void Session::clear() {
 Session::~Session() {
     activeUser= nullptr;
     clear();
-    for(auto z:userMap){
-        delete z.second;
-        z.second = nullptr;
-    }
+//    for(auto z:userMap){
+//        delete z.second;
+//        z.second = nullptr;
+//    }
 }
 void Session::start() {
     printf("SPLFLIX is now on!\n");
@@ -136,7 +142,7 @@ void Session::start() {
         vector_for_actions = input_to_vector(input_string);
 
         if (((int)vector_for_actions.size())==0 || ((int)vector_for_actions.size()) >3 ){
-            std::cout << "input put is not valid"<< std::endl;
+            std::cout << "input is not valid"<< std::endl;
 
         }else if(vector_for_actions.at(0)=="createuser"){
             //std::cin >> third;

@@ -106,7 +106,7 @@ Watchable* GenreRecommenderUser::getRecommendation(Session &s) {
         for(int j=0;j<e->get_tags().size();j++){ //iterate through tags of e
             bool found=false;
             std::string const &tag=e->get_tags().at((j));
-            for(int k=0;k<tagcount.size()&!found;k++) {
+            for(int k=0;k<tagcount.size() && !found;k++) {
                 if (tagcount.at(k).first == tag) { //this tag was already found
                     found = true;
                     tagcount.at(k).second++; //update tag counter
@@ -201,6 +201,14 @@ User* RerunRecommenderUser::clone() {
 }
 User* GenreRecommenderUser::clone() {
     User *p=new GenreRecommenderUser(*this);
+    return p;
+}
+
+void User::fix_History(const Session &s) {
+    for(int i=0;i<(int)history.size();i++){
+        int id = history.at(i)->get_id()-1;
+        history.at(i) = s.get_content().at(id);
+    }
 }
 
 

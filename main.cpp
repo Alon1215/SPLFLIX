@@ -1,9 +1,25 @@
 #include <iostream>
 #include "include/Session.h"
-#include "include/Watchable.h"
-int main() {
-//Session *s=new Session("/users/studs/bsc/2020/mosesofe/Desktop/SPL/config1.json");
-//s->start();
-    std::vector<Episode *> v;
-    std::vector<Episode *> v2;
+
+/*int main() {
+    Session *s=new Session("/users/studs/bsc/2020/mosesofe/Desktop/SPL/config1.json");
+    s->start();
+    Session *s2= s;
+    delete s;
+    s2->start();
+    delete s2;
+} */
+
+int main(int argc, char** argv){
+    if(argc!=2)
+    {
+        std::cout << "usage splflix input_file" << std::endl;
+        return 0;
+    }
+    Session* s = new Session("/users/studs/bsc/2020/mosesofe/Desktop/SPL/config2.json");
+    s->start();
+    Session s2 = *s;
+    delete(s);
+    s2.start();
+    return 0;
 }

@@ -20,6 +20,7 @@ public:
     void addToHistory(Watchable* toAdd);
     std::vector<Watchable*> cloneHistory() const ;
     virtual User* clone()=0;
+    void fix_History(const Session& s);
 
 
 

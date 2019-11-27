@@ -2,7 +2,6 @@
 // Created by alonmichaeli on 22/11/2019.
 //
 #include <string>
-#include <cstring>
 #include "../include/Action.h"
 #include "../include/User.h"
 #include "../include/Session.h"
@@ -12,6 +11,7 @@
 BaseAction::BaseAction() {
     status = PENDING;
 }
+BaseAction::~BaseAction() {}
 
 void BaseAction:: complete() {
     status = COMPLETED;
@@ -21,7 +21,7 @@ void BaseAction:: complete() {
 void BaseAction::error(const std::string &errorMsg) {
     status = ERROR;
     this->errorMsg = errorMsg;
-    std:: cout<<"Error -" + errorMsg << std::endl;
+    std:: cout<<"Error - " + errorMsg << std::endl;
 }
 
 std::string BaseAction::getErrorMsg() const {
@@ -168,7 +168,7 @@ void Watch::act(Session &sess) {
 }
 
 void DuplicateUser::act(Session &sess) {
-    if ((int )sess.get_vector_for_actions().size() != 2) {
+    if ((int )sess.get_vector_for_actions().size() != 3) {
         error("invalid input");
     }else {
         if (!sess.isInMap(sess.get_vector_for_actions().at(1))) {
@@ -193,57 +193,57 @@ void BaseAction::sub_toClone(BaseAction &other) {
 }
 
 //cloning:
-BaseAction* CreateUser::clone(BaseAction &other) {
+BaseAction* CreateUser::clone() {
     CreateUser* c1 = new CreateUser();
-    c1->sub_toClone(other);
+    c1->sub_toClone(*this);
     return  c1;
 }
-BaseAction* DuplicateUser::clone(BaseAction &other) {
+BaseAction* DuplicateUser::clone() {
     DuplicateUser* c1 = new DuplicateUser();
-    c1->sub_toClone(other);
+    c1->sub_toClone(*this);
     return  c1;
 }
 
-BaseAction* DeleteUser::clone(BaseAction &other) {
+BaseAction* DeleteUser::clone() {
     DeleteUser* c1 = new DeleteUser();
-    c1->sub_toClone(other);
+    c1->sub_toClone(*this);
     return  c1;
 }
 
-BaseAction* ChangeActiveUser::clone(BaseAction &other) {
+BaseAction* ChangeActiveUser::clone() {
     ChangeActiveUser* c1 = new ChangeActiveUser();
-    c1->sub_toClone(other);
+    c1->sub_toClone(*this);
     return  c1;
 }
 
-BaseAction* PrintActionsLog::clone(BaseAction &other) {
+BaseAction* PrintActionsLog::clone() {
     PrintActionsLog* c1 = new PrintActionsLog();
-    c1->sub_toClone(other);
+    c1->sub_toClone(*this);
     return  c1;
 }
 
-BaseAction* PrintWatchHistory::clone(BaseAction &other) {
+BaseAction* PrintWatchHistory::clone() {
     PrintWatchHistory* c1 = new PrintWatchHistory();
-    c1->sub_toClone(other);
+    c1->sub_toClone(*this);
     return  c1;
 }
 
-BaseAction* PrintContentList::clone(BaseAction &other) {
+BaseAction* PrintContentList::clone() {
     PrintContentList* c1 = new PrintContentList();
-    c1->sub_toClone(other);
+    c1->sub_toClone(*this);
     return  c1;
 }
 
-BaseAction* Watch::clone(BaseAction &other) {
+BaseAction* Watch::clone() {
     Watch* c1 = new Watch();
-    c1->sub_toClone(other);
+    c1->sub_toClone(*this);
     return  c1;
 }
 
-BaseAction* Exit::clone(BaseAction &other) {
+BaseAction* Exit::clone() {
     Exit* c1 = new Exit();
-    c1->sub_toClone(other);
-    return  c1;
+    c1->sub_toClone(*this);
+    return c1;
 }
 
 
