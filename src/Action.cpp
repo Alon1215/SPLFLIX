@@ -91,7 +91,7 @@ void DeleteUser::act(Session &sess) {
             error("User is not exist");
         } else {
             delete sess.getMap().at(_user);
-            sess.getMap().erase(_user);
+            sess.erase_from_map(_user);
             complete();
         }
     }

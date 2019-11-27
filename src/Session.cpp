@@ -244,3 +244,6 @@ std::vector<std::string> Session::input_to_vector(std::string str) {
     return output;
 }
 std::vector<std::string> Session::get_vector_for_actions() { return vector_for_actions;}
+void Session::erase_from_map(std::string st) {
+    userMap.erase(st);
+}

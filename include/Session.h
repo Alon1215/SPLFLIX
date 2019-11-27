@@ -31,6 +31,7 @@ public:
     static std::vector<std::string>  input_to_vector(std::string);
     std::vector<std::string> get_vector_for_actions();
     void steal(Session &other);
+    void erase_from_map(std::string);
 
 
 
