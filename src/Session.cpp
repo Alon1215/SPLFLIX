@@ -25,22 +25,25 @@ Session::Session(const std::string &configFilePath) {
         Movie *newMovie = new Movie(id, movie["name"], movie["length"], movie["tags"]);
         content.push_back(newMovie);
         id++;
-        }
-        nlohmann::json tv_series = j["tv_series"];
-        for (auto &x : tv_series.items()) {
-            nlohmann::json series = x.value();
-            std::vector<int> seasons = series["seasons"];
-            int seasonNumber = 1;
-            for (int y :seasons) {
-                for (int episodeNumber = 1; episodeNumber <= y; episodeNumber++) {
-                    Episode *newEpisode = new Episode(id, series["name"], series["episode_length"], seasonNumber,
-                                                      episodeNumber, series["tags"]);
-                    content.push_back(newEpisode);
-                    id++;
-                }
-                seasonNumber++;
+    }
+    nlohmann::json tv_series = j["tv_series"];
+    for (auto &x : tv_series.items()) {
+        nlohmann::json series = x.value();
+        std::vector<int> seasons = series["seasons"];
+        int seasonNumber = 1;
+        for (int y :seasons) {
+            for (int episodeNumber = 1; episodeNumber <= y; episodeNumber++) {
+                Episode *newEpisode = new Episode(id, series["name"], series["episode_length"], seasonNumber,
+                episodeNumber, series["tags"]);
+                content.push_back(newEpisode);
+                id++;
             }
+            seasonNumber++;
         }
+    }
+    User* p= new LengthRecommenderUser("default");
+    insertMap("default",p);
+    activeUser = p;
 }
 
 
@@ -112,7 +115,7 @@ Session::~Session() {
 }
 void Session::start() {
     printf("SPLFLIX is now on!\n");
-    activeUser= new LengthRecommenderUser("default");
+
     while(true){
         std::string input_string;
         printf("what would you like to do?\n");
@@ -129,11 +132,6 @@ void Session::start() {
             actionsLog.push_back(p);
         }
         else if(vector_for_actions.at(0)=="changeuser"){
-            if(activeUser->getName()=="default"){
-                delete activeUser;
-                activeUser=nullptr;
-            }
-
             ChangeActiveUser *p=new ChangeActiveUser();
             p->act(*this);
             actionsLog.push_back(p);
@@ -166,6 +164,9 @@ void Session::start() {
             Watch *p=new Watch();
             actionsLog.push_back(p);
             p->act(*this);
+            //prepare for next action:
+            getline(std::cin,input_string);
+            vector_for_actions = input_to_vector(input_string);
         }else if(vector_for_actions.at(0)=="exit") {
             Exit *p = new Exit();
             p->act(*this);
@@ -195,10 +196,7 @@ std:: unordered_map<std::string,User*> Session::getMap() {
 bool Session::isInMap(std::string s) {
     std::unordered_map<std::string,User*>::const_iterator got = userMap.find(s);
 
-    if ( got == userMap.end() )
-        return false;
-    else
-        return true;
+    return !(got == userMap.end());
 }
 void Session::insertMap(std::string s, User * u) {
     std::pair<std::string,User*> toinsert (s,u);

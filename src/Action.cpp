@@ -113,6 +113,7 @@ void PrintWatchHistory::act(Session &sess) {
     if ((int )sess.get_vector_for_actions().size() != 1) {
         error("invalid input");
     }else {
+        printf("Watch history for %s\n",sess.get_Active_User().getName().c_str());
         int i = 1;
         for (Watchable *x :sess.get_Active_User().get_history()) {
             printf("%d. %s\n", i, x->toString().c_str());

@@ -101,39 +101,40 @@ std::string GenreRecommenderUser::get_next_tag(std::vector<std::pair<std::string
 Watchable* GenreRecommenderUser::getRecommendation(Session &s) {
     std::vector<std::pair <std::string, int>> tagcount; //vector of pairs containing tag and count
     Watchable* out=nullptr;
-    for(int i=0;i<history.size();i++){
+    for(int i=0;i<(int) history.size();i++){
         Watchable *e=(history.at((i)));
         for(int j=0;j<e->get_tags().size();j++){ //iterate through tags of e
             bool found=false;
             std::string const &tag=e->get_tags().at((j));
-            for(int k=0;k<tagcount.size()&!found;k++){
-                if(tagcount.at(k).first== tag){ //this tag was already found
-                    found=true;
+            for(int k=0;k<tagcount.size()&!found;k++) {
+                if (tagcount.at(k).first == tag) { //this tag was already found
+                    found = true;
                     tagcount.at(k).second++; //update tag counter
                 }
-            if(!found){ //if this is a new tag create a pair with count 1 and add to tags vector
-                std::pair<std::string,int> p =std::make_pair(tag,1);
-                tagcount.push_back(p);
             }
+            if (!found) { //if this is a new tag create a pair with count 1 and add to tags vector
+                std::pair<std::string, int> p = std::make_pair(tag, 1);
+                tagcount.push_back(p);
             }
         }
     }
-        bool found=false;
-        std::vector <Watchable*> unwatched=get_unwatched(s); //get unwatched content
-        std::string next_tag;
-        while(!found and !tagcount.empty()){
-            next_tag=get_next_tag(tagcount); //get most popular tag
-            for(int i=0;i<unwatched.size();i++){ //look for a unwatched Watchable with this tag
-                Watchable* p=unwatched.at(i);
-                for(int j=0;j<p->get_tags().size();j++){ //iterate through this Watchable's tags
-                    if(p->get_tags().at(j)==next_tag){ //if we found the tag this will be recommended
-                        found=true;
-                        out=p;
-                    }
+
+    bool found=false;
+    std::vector <Watchable*> unwatched=get_unwatched(s); //get unwatched content
+    std::string next_tag;
+    while(!found and !tagcount.empty()){
+        next_tag=get_next_tag(tagcount); //get most popular tag
+        for(int i=0;i<unwatched.size();i++){ //look for a unwatched Watchable with this tag
+            Watchable* p=unwatched.at(i);
+            for(int j=0;j<p->get_tags().size()&&!found;j++){ //iterate through this Watchable's tags
+                if(p->get_tags().at(j)==next_tag){ //if we found the tag this will be recommended
+                    found=true;
+                     out=p;
                 }
             }
         }
-        return out;
+    }
+    return out;
 }
 void LengthRecommenderUser::fix_avg(int length) {
     avg= (avg*(get_history().size()-1) +length)/get_history().size();

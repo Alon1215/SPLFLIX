@@ -35,7 +35,17 @@ Episode::Episode(long id, const std::string &seriesName, int length, int season,
         const std::vector<std::string> &tags):Watchable(id,length,tags),seriesName(seriesName),season(season),episode(episode),nextEpisodeId(id+1){}
 
 std::string Episode::toString() const {
-    std::string st=seriesName+" S0"+std::to_string(season)+"E0"+std::to_string(episode);
+    //fix index for st:
+    std::string e = "E";
+    std::string s = "S";
+    if (episode < 10){
+        e = e + "0";
+    }
+    if (season < 10){
+        s = s + "0";
+    }
+    //create st:
+    std::string st=seriesName + s + std::to_string(season) + e + std::to_string(episode);
     return st;
 }
 std::string Watchable::content_string() {
