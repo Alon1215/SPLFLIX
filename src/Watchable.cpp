@@ -7,6 +7,7 @@
 #include "../include/Session.h"
 #include "../include/User.h"
 
+
 class User;
 class Session;
 
@@ -88,3 +89,20 @@ Watchable* Episode::getNextWatchable(Session &s) const {
     // else return algo' recommendtaion
 }
 Watchable::~Watchable() {}
+
+Watchable* Episode::clone() {
+    std::vector<std::string> newtags;
+    for(int i=0;i<(int)get_tags().size();i++){
+        newtags.push_back(get_tags().at(i));
+    }
+    Episode *e=new Episode(get_id(),seriesName,get_length(),season,episode,newtags);
+    return e;
+}
+Watchable* Movie::clone() {
+    std::vector<std::string> newtags;
+    for(int i=0;i<(int)get_tags().size();i++){
+        newtags.push_back(get_tags().at(i));
+    }
+    Movie *e=new Movie(get_id(),name,get_length(),newtags);
+    return e;
+}

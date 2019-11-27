@@ -18,6 +18,10 @@ public:
     virtual User* duplicate( std::string name)=0;
     virtual ~User();
     void addToHistory(Watchable* toAdd);
+    std::vector<Watchable*> cloneHistory() const ;
+    virtual User* clone()=0;
+
+
 
 
 protected:
@@ -36,9 +40,12 @@ public:
     virtual Watchable* getRecommendation(Session& s);
     LengthRecommenderUser (const LengthRecommenderUser &other);
     virtual User* duplicate(std::string name);
+    int get_avg() const;
     void fix_avg(int length);
     virtual void watch_handle_algo( Watchable *watched);
     virtual ~LengthRecommenderUser();
+    virtual User* clone();
+
 
 private:
     float avg;
@@ -48,10 +55,14 @@ private:
 class RerunRecommenderUser : public User {
 public:
     RerunRecommenderUser(const std::string& name);
+    RerunRecommenderUser(const RerunRecommenderUser &other);
     virtual Watchable* getRecommendation(Session& s);
     virtual User* duplicate( std::string name);
     virtual void watch_handle_algo( Watchable *watched);
     virtual ~RerunRecommenderUser();
+    virtual User* clone();
+
+
 private:
     int lastrec; //index for the last recommended content in history
 };
@@ -59,11 +70,14 @@ private:
 class GenreRecommenderUser : public User {
 public:
     GenreRecommenderUser(const std::string& name);
+    GenreRecommenderUser(const GenreRecommenderUser &other);
     virtual Watchable* getRecommendation(Session& s);
     std::string get_next_tag( std::vector<std::pair <std::string, int>>& tags);
     virtual void watch_handle_algo( Watchable *watched);
     virtual User* duplicate( std::string name);
     virtual ~GenreRecommenderUser();
+    virtual User* clone();
+
 
 private:
 };

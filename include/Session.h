@@ -14,7 +14,7 @@ public:
     Session(const std::string &configFilePath);
     ~Session();
     void start();
-    User& get_Active_User();
+     User& get_Active_User() const;
     const std::vector<Watchable *> get_content() const;
     Session(const Session &other);
     Session& operator=(const Session& other);

@@ -18,6 +18,7 @@ public:
     const std::vector<std::string>& get_tags() const;
     virtual const std::string get_name() const=0;
     std::string content_string ();
+    virtual Watchable* clone()=0;
 
 private:
     const long id;
@@ -32,6 +33,7 @@ public:
     virtual std::string toString() const;
     virtual Watchable* getNextWatchable(Session& ) const;
     virtual const std::string get_name() const;
+    virtual Watchable* clone();
 private:
     std::string name;
 };
@@ -43,6 +45,7 @@ public:
     virtual std::string toString() const;
     virtual Watchable* getNextWatchable(Session&) const;
     virtual const std::string get_name() const;
+    virtual Watchable* clone();
 private:
     std::string seriesName;
     int season;

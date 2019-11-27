@@ -50,68 +50,81 @@ Session::Session(const std::string &configFilePath) {
 
 Session::Session(const Session &other):activeUser(other.activeUser) { // copy consructor
     copy(other);
-    userMap=other.userMap; //use copy assignment operator of unordered_map
 }
 Session::Session(Session &&other):activeUser(other.activeUser) { //move constructor
+    for(Watchable* w : other.get_content()){
+        content.push_back(w);
+        w=nullptr;
+    }
+    for(BaseAction* a : other.get_ActionsLog()){
+        actionsLog.push_back(a);
+        a=nullptr;
+    }
+    for(auto e:other.userMap){
+        insertMap(e.first,e.second);
+        e.second=nullptr;
+    }
     other.activeUser= nullptr;
-    userMap=other.userMap; //use move operator of unordered_map
-    copy(other);
-    other.activeUser= nullptr;
+    //other.clear();
 }
 Session& Session::operator=(Session &&other) { //move assignment operator
     if(this!=&other){
         clear();
         delete activeUser;
-        for(auto z:userMap)
-            delete z.second;
-        userMap=other.userMap; //move assignment operator
         copy(other);
-        activeUser=other.activeUser;
         other.activeUser=nullptr;
 
     }
-
 }
 
-void Session::copy(const Session &other) {
-    for (int i=0; i<other.content.size(); i++)
-        content.push_back(other.content.at(i));
-    for(int i=0; i<other.actionsLog.size();i++)
-        actionsLog.push_back(other.actionsLog.at(i));
-
+void Session::copy(const Session &other) { //for copying
+    for (int i=0; i<other.content.size(); i++){
+       content.push_back(other.content.at(i)->clone());
+    }
+    for(int i=0; i<other.actionsLog.size();i++){
+        BaseAction* p1;
+        p1->clone(*get_ActionsLog().at(i));
+        actionsLog.push_back(p1);
+    }
+    for(auto i: other.userMap){
+        insertMap(i.first,i.second->clone());
+    }
+    activeUser = userMap[other.activeUser->getName()];
 }
 
-Session& Session::operator=(const Session &other) { //copy assingment operator
+Session& Session::operator=(const Session &other) { //copy assignment operator
     if(this != &other){
         clear();
-        delete activeUser;
+        activeUser = nullptr;
         copy(other);
-        activeUser=other.activeUser;
-        userMap=other.userMap; //use copy assignment operator of unordered_map
     }
     return *this;
 }
 
 
-User& Session::get_Active_User()   {
+ User& Session::get_Active_User() const   {
     return *activeUser ;
 }
 const std::vector<Watchable*> Session::get_content() const {
     return content;
 }
 void Session::clear() {
-    for(auto x:content)
+    for(auto x:content) {
         delete x;
-    for(auto y:actionsLog)
+    }for(auto y:actionsLog){
         delete y;
-
-
+    }
+    for(auto i:userMap){
+        delete i.second;
+    }
 }
 Session::~Session() {
-    delete activeUser;
+    activeUser= nullptr;
     clear();
-    for(auto z:userMap)
+    for(auto z:userMap){
         delete z.second;
+        z.second = nullptr;
+    }
 }
 void Session::start() {
     printf("SPLFLIX is now on!\n");

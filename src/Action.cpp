@@ -187,6 +187,66 @@ void Exit::act(Session &sess) {
     complete();
 }
 
+void BaseAction::sub_toClone(BaseAction &other) {
+    errorMsg = other.errorMsg;
+    status = other.status;
+}
+
+//cloning:
+BaseAction* CreateUser::clone(BaseAction &other) {
+    CreateUser* c1 = new CreateUser();
+    c1->sub_toClone(other);
+    return  c1;
+}
+BaseAction* DuplicateUser::clone(BaseAction &other) {
+    DuplicateUser* c1 = new DuplicateUser();
+    c1->sub_toClone(other);
+    return  c1;
+}
+
+BaseAction* DeleteUser::clone(BaseAction &other) {
+    DeleteUser* c1 = new DeleteUser();
+    c1->sub_toClone(other);
+    return  c1;
+}
+
+BaseAction* ChangeActiveUser::clone(BaseAction &other) {
+    ChangeActiveUser* c1 = new ChangeActiveUser();
+    c1->sub_toClone(other);
+    return  c1;
+}
+
+BaseAction* PrintActionsLog::clone(BaseAction &other) {
+    PrintActionsLog* c1 = new PrintActionsLog();
+    c1->sub_toClone(other);
+    return  c1;
+}
+
+BaseAction* PrintWatchHistory::clone(BaseAction &other) {
+    PrintWatchHistory* c1 = new PrintWatchHistory();
+    c1->sub_toClone(other);
+    return  c1;
+}
+
+BaseAction* PrintContentList::clone(BaseAction &other) {
+    PrintContentList* c1 = new PrintContentList();
+    c1->sub_toClone(other);
+    return  c1;
+}
+
+BaseAction* Watch::clone(BaseAction &other) {
+    Watch* c1 = new Watch();
+    c1->sub_toClone(other);
+    return  c1;
+}
+
+BaseAction* Exit::clone(BaseAction &other) {
+    Exit* c1 = new Exit();
+    c1->sub_toClone(other);
+    return  c1;
+}
+
+
 
 
 //ActiveLog per user wasn't handled - actions are not added to log
@@ -201,7 +261,6 @@ std::string PrintContentList::toString() const {return "PrintContentList";}
 std::string PrintWatchHistory::toString() const {return "PrintWatchHistory";}
 std::string Watch::toString() const {return "Watch";}
 std::string Exit::toString() const {return "Exit";}
-
 
 
 

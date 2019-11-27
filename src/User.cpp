@@ -171,6 +171,37 @@ LengthRecommenderUser::~LengthRecommenderUser(){}
 RerunRecommenderUser::~RerunRecommenderUser() {}
 GenreRecommenderUser::~GenreRecommenderUser() {}
 
+int LengthRecommenderUser::get_avg() const { return avg;}
+
+std::vector<Watchable*> User::cloneHistory() const {
+    std::vector<Watchable*> output;
+    for (Watchable* x: history){
+        output.push_back(x);
+    }
+    return output;
+}
+
+LengthRecommenderUser::LengthRecommenderUser(const LengthRecommenderUser &other): User(other.getName()), avg(other.get_avg()) {
+    history = other.cloneHistory();
+}
+
+RerunRecommenderUser::RerunRecommenderUser(const RerunRecommenderUser &other):  User(other.getName()),lastrec(other.lastrec) {
+    history = other.cloneHistory();
+}
+GenreRecommenderUser::GenreRecommenderUser(const GenreRecommenderUser &other): User(other.getName()) {
+    history = other.cloneHistory();
+}
+User* LengthRecommenderUser::clone() {
+   User* p =new LengthRecommenderUser(*this);
+   return p;
+}
+User* RerunRecommenderUser::clone() {
+    User* p=new RerunRecommenderUser(*this);
+    return p;
+}
+User* GenreRecommenderUser::clone() {
+    User *p=new GenreRecommenderUser(*this);
+}
 
 
 
