@@ -13,7 +13,7 @@
 
 
 
-Session::Session(const std::string &configFilePath) {
+Session::Session(const std::string &configFilePath):content(), actionsLog(),userMap(),activeUser(),vector_for_actions() {
 
 
     std::fstream ifs(configFilePath);
@@ -48,15 +48,15 @@ Session::Session(const std::string &configFilePath) {
 
 
 
-Session::Session(const Session &other):activeUser(other.activeUser) { // copy consructor
+Session::Session(const Session &other): content(), actionsLog(),userMap(),activeUser(other.activeUser),vector_for_actions() { // copy consructor
     copy(other);
 }
 
 void Session::copy(const Session &other) { //for copying
-    for (int i=0; i<other.content.size(); i++){
+    for (int i=0; i < (int) other.content.size(); i++){
         content.push_back(other.content.at(i)->clone());
     }
-    for(int i=0; i<other.actionsLog.size();i++){
+    for(int i=0; (unsigned) i<other.actionsLog.size();i++){
         BaseAction *p1 = other.actionsLog.at(i)->clone();
         actionsLog.push_back(p1);
     }
@@ -68,23 +68,24 @@ void Session::copy(const Session &other) { //for copying
     activeUser = userMap[other.activeUser->getName()];
 }
 void Session::steal(Session &other) {
-    for(Watchable* w : other.get_content()){
-        content.push_back(w);
-        w=nullptr;
+    for(int i=0;(unsigned)i<other.get_content().size();i++){
+        Watchable* p=other.get_content().at(i);
+        content.push_back(p);
+        other.content.at(i)=nullptr;
     }
-    for(BaseAction* a : other.get_ActionsLog()){
-        actionsLog.push_back(a);
-        a=nullptr;
+    for(int i=0;(unsigned) i<other.actionsLog.size();i++){
+        actionsLog.push_back(other.actionsLog.at(i));
+        other.actionsLog.at(i)=nullptr;
     }
     for(auto e:other.userMap){
         insertMap(e.first,e.second);
-        e.second=nullptr;
+         other.userMap[e.first]=nullptr;
     }
     other.activeUser= nullptr;
     //other.clear();
 }
 
-Session::Session(Session &&other):activeUser(other.activeUser) { //move constructor
+Session::Session(Session &&other):  content(), actionsLog(),userMap(),activeUser(other.activeUser),vector_for_actions() { //move constructor
    steal(other);
 }
 Session& Session::operator=(Session &&other) { //move assignment operator
@@ -123,6 +124,11 @@ void Session::clear() {
     for(auto i:userMap){
         delete i.second;
     }
+    content.clear();
+    actionsLog.clear();
+    vector_for_actions.clear();
+    userMap.clear();
+
 }
 Session::~Session() {
     activeUser= nullptr;

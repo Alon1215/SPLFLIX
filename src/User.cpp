@@ -10,7 +10,7 @@
 #include <stdlib.h>
 class Watchable;
 
-User::User(const std::string &name): name(name),history( std::vector<Watchable*> ()) {
+User::User(const std::string &name):history( std::vector<Watchable*> ()),name(name) {
     //check HISTORY
 }
 
@@ -34,10 +34,10 @@ GenreRecommenderUser::GenreRecommenderUser(const std::string &name):User(name) {
 
 std::vector<Watchable*> User::get_unwatched(Session& s) {
     std::vector<Watchable*> output;
-    for(int i=0;i<s.get_content().size();i++){ //iterate through all content
+    for(int i=0; (unsigned) i<s.get_content().size();i++){ //iterate through all content
         bool watched=false;
         Watchable *e=(s.get_content().at((i)));
-        for(int j=0;j<history.size() and !watched;j++) { //iterate through history
+        for(int j=0;(unsigned) j<history.size() and !watched;j++) { //iterate through history
             if(e->get_id() == history.at(j)->get_id()) //check if we watched this content
                 watched=true;
         }
@@ -52,10 +52,10 @@ std::vector<Watchable*> User::get_unwatched(Session& s) {
 Watchable* LengthRecommenderUser::getRecommendation(Session &s) {
     float mindif=-1;
     Watchable *out=nullptr;
-    for(int i=0;i<s.get_content().size();i++){ //iterate through all content
+    for(int i=0; (unsigned) i<s.get_content().size();i++){ //iterate through all content
         bool watched=false;
         Watchable *e=(s.get_content().at((i)));
-        for(int j=0;j<history.size() and !watched;j++) { //iterate through history
+        for(int j=0;(unsigned) j<history.size() and !watched;j++) { //iterate through history
             if(e->get_id() == history.at(j)->get_id()) //check if we watched this content
                 watched=true;
         }
@@ -80,7 +80,7 @@ Watchable* RerunRecommenderUser::getRecommendation(Session &s) {
 std::string GenreRecommenderUser::get_next_tag(std::vector<std::pair<std::string, int>> &tags) { //get next popular tag
     std::pair<std::string,int> &max=tags.at(0);
     int maxindex=0;
-    for(int i=1;i<tags.size();i++){
+    for(int i=1;(unsigned) i<tags.size();i++){
         std::pair<std::string,int> &p=tags.at(i);
         if(p.second>max.second){
             max=p;
@@ -101,12 +101,12 @@ std::string GenreRecommenderUser::get_next_tag(std::vector<std::pair<std::string
 Watchable* GenreRecommenderUser::getRecommendation(Session &s) {
     std::vector<std::pair <std::string, int>> tagcount; //vector of pairs containing tag and count
     Watchable* out=nullptr;
-    for(int i=0;i<(int) history.size();i++){
+    for(int i=0;(unsigned) i<history.size();i++){
         Watchable *e=(history.at((i)));
-        for(int j=0;j<e->get_tags().size();j++){ //iterate through tags of e
+        for(int j=0;(unsigned) j<e->get_tags().size();j++){ //iterate through tags of e
             bool found=false;
             std::string const &tag=e->get_tags().at((j));
-            for(int k=0;k<tagcount.size() && !found;k++) {
+            for(int k=0;(unsigned) k<tagcount.size() && !found;k++) {
                 if (tagcount.at(k).first == tag) { //this tag was already found
                     found = true;
                     tagcount.at(k).second++; //update tag counter
@@ -124,9 +124,9 @@ Watchable* GenreRecommenderUser::getRecommendation(Session &s) {
     std::string next_tag;
     while(!found and !tagcount.empty()){
         next_tag=get_next_tag(tagcount); //get most popular tag
-        for(int i=0;i<unwatched.size();i++){ //look for a unwatched Watchable with this tag
+        for(int i=0;(unsigned) i<unwatched.size();i++){ //look for a unwatched Watchable with this tag
             Watchable* p=unwatched.at(i);
-            for(int j=0;j<p->get_tags().size()&&!found;j++){ //iterate through this Watchable's tags
+            for(int j=0;(unsigned) j<p->get_tags().size()&&!found;j++){ //iterate through this Watchable's tags
                 if(p->get_tags().at(j)==next_tag){ //if we found the tag this will be recommended
                     found=true;
                      out=p;

@@ -33,8 +33,6 @@ public:
     void steal(Session &other);
     void erase_from_map(std::string);
 
-
-
 private:
     std::vector<Watchable*> content;
     std::vector<BaseAction*> actionsLog;

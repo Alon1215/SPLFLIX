@@ -8,8 +8,7 @@
 #include "../include/Watchable.h"
 
 
-BaseAction::BaseAction() {
-    status = PENDING;
+BaseAction::BaseAction():errorMsg(""),status(PENDING) {
 }
 BaseAction::~BaseAction() {}
 
@@ -142,7 +141,7 @@ void Watch::act(Session &sess) {
     else {
         int id = sess.getIdToWatch();
         //id already updated to place in content
-        if (id < 0 || id >= sess.get_content().size()) {
+        if (id < 0 ||(unsigned) id >= sess.get_content().size()) {
             error("index is not valid");
         } else {
             complete();
@@ -150,16 +149,20 @@ void Watch::act(Session &sess) {
             printf("Watching %s\n", toWatch->toString().c_str()); //check
             sess.get_Active_User().watch_handle_algo(toWatch);
             Watchable *next = toWatch->getNextWatchable(sess);
-            printf("We recommend watching %s, continue watching?[y/n]\n", next->toString().c_str());
-            std::string input;
-            std::cin >> input;
-            if (input == "y") {
-                sess.set_next_id(next->get_id());
-                Watch *c1 = new Watch();
-                sess.get_ActionsLog().push_back(c1);
-                c1->act(sess);
-            } else if (input != "n") {
-                printf("wrong input, should be y/n\n");
+            if (next == nullptr){
+                printf("no recommendation available\n");
+            }else {
+                printf("We recommend watching %s, continue watching?[y/n]\n", next->toString().c_str());
+                std::string input;
+                std::cin >> input;
+                if (input == "y") {
+                    sess.set_next_id(next->get_id());
+                    Watch *c1 = new Watch();
+                    sess.get_ActionsLog().push_back(c1);
+                    c1->act(sess);
+                } else if (input != "n") {
+                    printf("wrong input, should be y/n\n");
+                }
             }
         }
     }

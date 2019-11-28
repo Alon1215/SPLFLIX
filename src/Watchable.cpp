@@ -54,7 +54,7 @@ std::string Watchable::content_string() {
     std::vector<std::string> _tags=get_tags();
     int i=0;
     for(auto tag = _tags.begin(); tag != _tags.end(); ++tag){ //adding the _tags to the string
-        if(i < _tags.size() - 1) { //if this is not the final tag add  a comma
+        if((unsigned) i < _tags.size() - 1) { //if this is not the final tag add  a comma
             st += *tag + ", ";
         }
         else{
@@ -78,8 +78,7 @@ const std::string Movie::get_name() const {
 
 
 Watchable* Episode::getNextWatchable(Session &s) const {
-    Watchable *out = nullptr;
-    if (nextEpisodeId < s.get_content().size()) {
+    if ((unsigned) nextEpisodeId < s.get_content().size()) {
         Watchable *p = s.get_content().at(nextEpisodeId-1);
         if (seriesName == p->get_name()) { //check if there is a next episode available, if so return it
             return p;

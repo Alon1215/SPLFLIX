@@ -16,10 +16,13 @@ int main(int argc, char** argv){
         std::cout << "usage splflix input_file" << std::endl;
         return 0;
     }
-    Session* s = new Session("/users/studs/bsc/2020/mosesofe/Desktop/SPL/config2.json");
+    Session* s = new Session("/users/studs/bsc/2020/mosesofe/Desktop/SPL/config3 (copy).json");
     s->start();
-    Session s2 = *s;
+    Session s2("/users/studs/bsc/2020/mosesofe/Desktop/SPL/config3 (copy).json");
+    s2 = std::move(s2.forTestOnly());
+    s2=*s;
     delete(s);
     s2.start();
+
     return 0;
 }
