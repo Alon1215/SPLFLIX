@@ -90,7 +90,7 @@ Session::Session(Session &&other):activeUser(other.activeUser) { //move construc
 Session& Session::operator=(Session &&other) { //move assignment operator
     if(this!=&other){
         clear();
-        //delete activeUser; //check if line needed
+        //delete activeUser;
         steal(other);
     }
     return *this;
@@ -198,7 +198,6 @@ void Session::start() {
 void Session::set_Active_user(User* user_Ptr) {
     //recieves ptr to user and replace the ptr "active user"
     activeUser = user_Ptr;
-    //check if function is legal
 }
 int Session::getIdToWatch() {return stoi(vector_for_actions.at(1)) -1;} //-1 to Match content's index
 void Session::set_next_id(int id) {
@@ -207,7 +206,7 @@ void Session::set_next_id(int id) {
 
 std::vector<BaseAction*>& Session::get_ActionsLog() {
 
-    return  actionsLog; //syntax is not valid
+    return  actionsLog;
 }
 std:: unordered_map<std::string,User*> Session::getMap() {
     return userMap;
@@ -223,7 +222,7 @@ void Session::insertMap(std::string s, User * u) {
 }
 
 
-//new way to receive input
+
 std::vector<std::string> Session::input_to_vector(std::string str) {
     std::string word = "";
     std::vector<std::string> output;

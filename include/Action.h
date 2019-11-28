@@ -17,7 +17,7 @@ public:
 	ActionStatus getStatus() const;
 	virtual void act(Session& sess)=0;
 	virtual std::string toString() const=0;
-    std::string sub_ToString() const; //can it be protected?
+    std::string sub_ToString() const;
     void sub_toClone(BaseAction&);
     virtual BaseAction* clone() = 0;
     virtual ~BaseAction();

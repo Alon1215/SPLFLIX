@@ -210,13 +210,3 @@ void User::fix_History(const Session &s) {
         history.at(i) = s.get_content().at(id);
     }
 }
-
-
-
-
-
-//RerunRecommenderUser:
-
-
-//GenreRecommenderUser:
-

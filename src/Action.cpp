@@ -76,7 +76,6 @@ void ChangeActiveUser::act(Session &sess) {
             error("User is not exist");
         } else {
             sess.set_Active_user(sess.getMap()[sess.get_vector_for_actions().at(1)]);
-            //check line while deBugging
             complete();
         }
     }
@@ -135,7 +134,6 @@ void PrintActionsLog::act(Session &sess) {
     }
 }
 
-//empty actions:
 
 void Watch::act(Session &sess) {
     if ((int)sess.get_vector_for_actions().size() != 2) {
@@ -249,7 +247,6 @@ BaseAction* Exit::clone() {
 
 
 
-//ActiveLog per user wasn't handled - actions are not added to log
 
 // toString() functions:
 std::string ChangeActiveUser::toString() const { return "ChangeActiveUser"; }
