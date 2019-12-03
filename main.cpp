@@ -2,13 +2,10 @@
 #include "include/Session.h"
 
 int main() {
-    //Session *s=new Session("/users/studs/bsc/2020/mosesofe/Desktop/SPL/config1.json");
-    /*s->start();
-    Session *s2= s;
+    Session *s=new Session("/users/studs/bsc/2020/mosesofe/Desktop/SPL/config3(copy).json");
+    s->start();
     delete s;
-    s2->start();
-    delete s2;*/
-    Session* s1 = new Session("/users/studs/bsc/2020/mosesofe/Desktop/SPL/config1.json"); //const
+   /* Session* s1 = new Session("/users/studs/bsc/2020/mosesofe/Desktop/SPL/config1.json"); //const
     s1->start();
     Session* s2 = new Session("/users/studs/bsc/2020/mosesofe/Desktop/SPL/config1.json");
     s2->start();
@@ -30,6 +27,7 @@ int main() {
     s2->start();
     delete(s2);
     return 0;
+    */
 }
 /*
 

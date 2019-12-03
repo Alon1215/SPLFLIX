@@ -75,7 +75,6 @@ Watchable* RerunRecommenderUser::getRecommendation(Session &s) {
     else
         lastrec= (lastrec+1)%(int)history.size();
     return history.at(lastrec);
-
 }
 std::string GenreRecommenderUser::get_next_tag(std::vector<std::pair<std::string, int>> &tags) { //get next popular tag
     std::pair<std::string,int> &max=tags.at(0);
