@@ -68,6 +68,7 @@ void Session::copy(const Session &other) { //for copying
     activeUser = userMap[other.activeUser->getName()];
 }
 void Session::steal(Session &other) {
+    std::string activeName = other.activeUser->getName(); //name of active user
     for(int i=0;(unsigned)i<other.get_content().size();i++){
         Watchable* p=other.get_content().at(i);
         content.push_back(p);
@@ -82,7 +83,7 @@ void Session::steal(Session &other) {
          other.userMap[e.first]=nullptr;
     }
     other.activeUser= nullptr;
-    //other.clear();
+    activeUser = userMap[activeName];
 }
 
 Session::Session(Session &&other):  content(), actionsLog(),userMap(),activeUser(other.activeUser),vector_for_actions() { //move constructor

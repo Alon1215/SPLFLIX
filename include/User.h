@@ -78,6 +78,7 @@ public:
     virtual User* duplicate( std::string name);
     virtual ~GenreRecommenderUser();
     virtual User* clone();
+    static std::string lower_case(std::string st);
 
 
 private:

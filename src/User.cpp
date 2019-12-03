@@ -87,7 +87,7 @@ std::string GenreRecommenderUser::get_next_tag(std::vector<std::pair<std::string
             maxindex=i;
         }
         else if(p.second==max.second){
-            if(p.first.compare(p.first)>0){
+            if(lower_case(max.first).compare(lower_case(p.first))>0){
                 max=p;
                 maxindex=i;
             }
@@ -95,6 +95,13 @@ std::string GenreRecommenderUser::get_next_tag(std::vector<std::pair<std::string
     }
     std::string output=max.first;
     tags.erase(tags.begin()+maxindex);
+    return output;
+}
+std::string GenreRecommenderUser::lower_case(std::string st) { //returns st with only lower case chars.
+    std::string output = "";
+    for (char c:st) {
+        output += tolower(c);
+    }
     return output;
 }
 
