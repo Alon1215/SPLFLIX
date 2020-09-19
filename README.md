@@ -1,6 +1,6 @@
 # SPLFLIX
 First project in "Systems Programming" course: building a streaming platform, recommendation - algorithms driven.
-***The essence of the project: implement an object-oriented system, gain implementation experience in C++, and using "The rule of 5" for memory handling ***
+- ***The essence of the project: implement an object-oriented system, gain implementation experience in C++, and using "The rule of 5" for memory handling***
 
 ## Strory frame and logic
 - SPLFLIX offers users two types of streaming content – movies and tv-serieses. 
